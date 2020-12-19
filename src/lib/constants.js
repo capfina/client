@@ -10,6 +10,10 @@ export const CONTRACTS = {
 	'0x1': {
 	},
 	'0x3': {
+		DAI: '0xd90Dc99200F38fdF5F42Ce753839DdBFf93bb550'.toLowerCase(),
+		PRODUCTS: '0x9BA6F4bE7ea9C769C5f81c7559062eB062fbe94C'.toLowerCase(),
+		TRADING: '0x101c05ecfb8fcdF75d13E72fbA0db651e1709c6d'.toLowerCase(),
+		TREASURY: '0xDc240537E16acdaCCC1AdC7c60D6D3689113Ab1A'.toLowerCase()
 	},
 	'0x64': {
 	},
