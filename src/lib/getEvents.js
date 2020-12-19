@@ -51,7 +51,7 @@ function extractLogData(log) {
 			eventName: 'Order Cancelled',
 			id: decodeUint(data, 2).toString(),
 			positionId: decodeUint(data, 2 + 64).toString(),
-			reason: decodeString(data, 2 + 64 * 2),
+			reason: decodeString(data, 2 + 64 * 3, /* length */ parseInt(data.slice(2 + 64 * 2, 2 + 64 * 3), 16)),
 			blockNumber: parseInt(blockNumber, 16),
 			txhash: transactionHash
 		}
