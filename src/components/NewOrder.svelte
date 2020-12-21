@@ -138,7 +138,7 @@
 				<Input
 					_type='text'
 					bind:element={input}
-					placeholder='BTC, ETH, TSLA, AAPL... or FIGI code'
+					placeholder='BTC, AAPL... or Composite FIGI'
 					uppercase={true}
 					bind:value={product}
 				/>

@@ -1,5 +1,7 @@
 <script>
 	import Panel from './Panel.svelte'
+	import Input from './Input.svelte'
+	import Button from './Button.svelte'
 	import { baseBalance, reloadBalance, freeMargin } from '../stores/balances'
 	import { chainId } from '../stores/main'
 	import { asyncTimeout, formatBigInt, parseDecimal } from '../lib/utils'
@@ -9,13 +11,37 @@
 	import withdraw from '../lib/withdraw'
 	import requestFaucet from '../lib/requestFaucet'
 
+	let input;
+
+	let showDeposit = false;
+	let showWithdraw = false;
+	let depositAmount;
+	let withdrawAmount;
+
+	function validateInputs() {
+		if (!input) return;
+		if (input.validity.patternMismatch || input.validity.valueMissing) return true;
+	}
+
+	function toggleDeposit() {
+		showWithdraw = false;
+		showDeposit = !showDeposit;
+	}
+	function toggleWithdraw() {
+		showDeposit = false;
+		showWithdraw = !showWithdraw;
+	}
+
 	async function _deposit() {
+		console.log('depositAmount', depositAmount);
+		if (!depositAmount) return;
 		try {
 			const txhash = await deposit({
 				currency: 'DAI',
-				amount: parseDecimal('1000', BigInt(8))
+				amount: parseDecimal("" + depositAmount, BigInt(8))
 			});
-			showToast('1000 DAI deposit pending.', 'success');
+			showToast(depositAmount + ' DAI deposit pending.', 'success');
+			showDeposit = false;
 		} catch (e) {
 			console.log(e);
 			showToast(e && e.message);
@@ -23,12 +49,14 @@
 	}
 
 	async function _withdraw() {
+		if (!withdrawAmount) return;
 		try {
 			const txhash = await withdraw({
 				currency: 'DAI',
-				amount: parseDecimal('100', BigInt(8))
+				amount: parseDecimal("" + withdrawAmount, BigInt(8))
 			});
-			showToast('100 DAI withdrawal pending.', 'success');
+			showToast(withdrawAmount + ' DAI withdrawal pending.', 'success');
+			showWithdraw = false;
 		} catch (e) {
 			console.log(e);
 			showToast(e && e.message);
@@ -51,7 +79,55 @@
 
 <Panel title='Balance'>
 	<div class='row'>
-		<div class='label'>DAI {#if chainId != '0x1'}(<a title='Get 10000 testnet DAI' on:click={faucet}>faucet</a>) {/if}<a on:click={_deposit} title='Deposit 1000 DAI'>Deposit</a> | <a on:click={_withdraw} title='Withdraw 100 DAI'>Withdraw</a></div>
-		<div class='value'>Wallet: {formatBigInt($baseBalance)} | on site: {formatBigInt($freeMargin, BigInt(8))}</div>
+		<div class='label'>DAI <a on:click={toggleDeposit} title='Deposit DAI'>Deposit</a> | <a on:click={toggleWithdraw} title='Withdraw DAI'>Withdraw</a></div>
+		<div class='value'>{formatBigInt($freeMargin, BigInt(8))}</div>
 	</div>
+	{#if showDeposit || showWithdraw}
+	<div class='row'>
+		<div class='label'>Wallet DAI {#if chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
+		<div class='value'>{formatBigInt($baseBalance)}</div>
+	</div>
+	{/if}
+	{#if showDeposit}
+	<form
+		on:submit|preventDefault={_deposit}
+		on:invalid={validateInputs}
+		on:changed={validateInputs}
+		on:input={validateInputs}
+	>
+		<div class='row'>
+			<Input
+				bind:element={input}
+				placeholder='DAI amount to deposit'
+				bind:value={depositAmount}
+			/>
+		</div>
+		<div class='row'>
+			<Button 
+				text='Deposit'
+			/>
+		</div>
+	</form>
+	{/if}
+	{#if showWithdraw}
+	<form
+		on:submit|preventDefault={_withdraw}
+		on:invalid={validateInputs}
+		on:changed={validateInputs}
+		on:input={validateInputs}
+	>
+		<div class='row'>
+			<Input
+				bind:element={input}
+				placeholder='DAI amount to withdraw'
+				bind:value={withdrawAmount}
+			/>
+		</div>
+		<div class='row'>
+			<Button 
+				text='Withdraw'
+			/>
+		</div>
+	</form>
+	{/if}
 </Panel>
