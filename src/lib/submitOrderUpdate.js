@@ -15,16 +15,14 @@ export default async function submitOrderUpdate(params) {
 
 	let {
 		margin,
-		isBuy,
 		positionId
 	} = params;
 
 	return ethSend({
 		address: getAddress('TRADING'),
 		gas: '0x249f0', // 150K
-		method: 'submitOrderUpdate(uint256,bool,uint256)',
+		method: 'submitOrderUpdate(uint256,uint256)',
 		data: encodeUint(positionId) + 
-			encodeUint(isBuy ? 1 : 0) +
 			encodeUint(margin)
 	});
 
