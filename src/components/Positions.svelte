@@ -178,12 +178,12 @@
 				<span>
 					{position.isBuy ? '⬆' : '⬇'} {figiToProduct(position.symbol)} {formatBigInt(position.leverage, BigInt(8))}×{formatBigInt(position.margin, BigInt(8))} DAI @ {formatBigInt(position.price, BigInt(8))} [{position.id}]
 				</span>
-				<a on:click={() => {toggleAddMargin(position.id)}}>+Margin</a> <a on:click={() => {toggleClosePosition(position.id)}}>Close</a> <a on:click={() => {toggleEstimator(position.id)}}>Est</a>
+				<a on:click={() => {toggleClosePosition(position.id)}}>Close</a> <a on:click={() => {toggleEstimator(position.id)}}>Est</a>
 			</div>
 			{#if showClosePosition == position.id}
 				<div class='sub-row'>
 					<form
-						on:submit|preventDefault={() => {closePosition(position.id, position.isBuy, formatBigInt(position.margin, BigInt(8)))}}
+						on:submit|preventDefault={() => {closePosition(position.id, position.isBuy, formatBigInt(position.margin, BigInt(8), BigInt(8)))}}
 						on:invalid={validateInputs}
 						on:changed={validateInputs}
 						on:input={validateInputs}
