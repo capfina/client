@@ -14,9 +14,7 @@
 	let input;
 	
 	let loadingClose = false;
-	let loadingAddMargin = false;
 	let loadingEstimatePnl = false;
-	let showAddMargin;
 	let showClosePosition;
 	let showEstimator;
 	let estimatedPnl;
@@ -31,21 +29,7 @@
 		if (input.validity.patternMismatch || input.validity.valueMissing) return true;
 	}
 
-	function toggleAddMargin(id) {
-		showClosePosition = undefined;
-		showEstimator = undefined;
-		margin = undefined;
-		close_price = undefined;
-		estimatedPnl = undefined;
-		if (showAddMargin == id) {
-			showAddMargin = undefined;
-		} else {
-			showAddMargin = id;
-		}
-	}
-
 	function toggleClosePosition(id) {
-		showAddMargin = undefined;
 		showEstimator = undefined;
 		margin = undefined;
 		close_price = undefined;
@@ -58,7 +42,6 @@
 	}
 
 	function toggleEstimator(id) {
-		showAddMargin = undefined;
 		showClosePosition = undefined;
 		margin = undefined;
 		close_price = undefined;
@@ -82,7 +65,6 @@
 		
 		const params = {
 			margin: parseDecimal(margin, BigInt(8)),
-			isBuy: isBuy ? false : true,
 			positionId: id
 		}
 		console.log('params FIRST-C', params);
@@ -97,30 +79,6 @@
 			showToast(e && e.message);
 		} finally {
 			loadingClose = false;
-		}
-
-	}
-
-	async function addMargin(id, isBuy) {
-
-		loadingAddMargin = true;
-		console.log('amount', margin);
-
-		const params = {
-			margin: parseDecimal(margin, BigInt(8)),
-			isBuy,
-			positionId: id
-		}
-		console.log('params FIRST-U', params);
-		try {
-			const txhash = await submitOrderUpdate(params);
-			showToast('Submitted add margin and awaiting confirmation.', 'success');
-			toggleAddMargin(id);
-		} catch (e) {
-			console.error(e);
-			showToast(e && e.message);
-		} finally {
-			loadingAddMargin = false;
 		}
 
 	}
@@ -220,32 +178,12 @@
 				<span>
 					{position.isBuy ? '⬆' : '⬇'} {figiToProduct(position.symbol)} {formatBigInt(position.leverage, BigInt(8))}×{formatBigInt(position.margin, BigInt(8))} DAI @ {formatBigInt(position.price, BigInt(8))} [{position.id}]
 				</span>
-				<a on:click={() => {toggleAddMargin(position.id)}}>+Margin</a> <a on:click={() => {toggleClosePosition(position.id)}}>Close</a> <a on:click={() => {toggleEstimator(position.id)}}>Est</a>
+				<a on:click={() => {toggleClosePosition(position.id)}}>Close</a> <a on:click={() => {toggleEstimator(position.id)}}>Est</a>
 			</div>
-			{#if showAddMargin == position.id}
-				<div class='sub-row'>
-					<form
-						on:submit|preventDefault={() => {addMargin(position.id, position.isBuy)}}
-						on:invalid={validateInputs}
-						on:changed={validateInputs}
-						on:input={validateInputs}
-					>
-						<Input
-							bind:element={input}
-							placeholder='Margin to add'
-							bind:value={margin}
-						/>
-						<Button 
-							text='Add Margin'
-							isloading={loadingAddMargin}
-						/>
-					</form>
-				</div>
-			{/if}
 			{#if showClosePosition == position.id}
 				<div class='sub-row'>
 					<form
-						on:submit|preventDefault={() => {closePosition(position.id, position.isBuy, formatBigInt(position.margin, BigInt(8)))}}
+						on:submit|preventDefault={() => {closePosition(position.id, position.isBuy, formatBigInt(position.margin, BigInt(8), BigInt(8)))}}
 						on:invalid={validateInputs}
 						on:changed={validateInputs}
 						on:input={validateInputs}
