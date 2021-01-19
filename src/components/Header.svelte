@@ -22,7 +22,7 @@
 
 <header>
 	<div class='logo'>
-		<img alt='Cap Logo' src='/assets/logo-pure.svg' /> [Ropsten]
+		<img alt='Cap Logo' src='/assets/logo-pure.svg' />
 	</div>
 	<Wallet/>
 </header>
