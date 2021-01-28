@@ -129,8 +129,8 @@
 
 				pnl -= fundingToApply;
 
-				if (pnl <= - 1 * margin) {
-					estimatedPnl = (- 1 * posAmount).toFixed(4) + " DAI (liquidated)";
+				if (pnl <= -1 * margin) {
+					estimatedPnl = (-1 * posAmount).toFixed(4) + " DAI (liquidated)";
 				} else {
 					estimatedPnl = pnl.toFixed(4) + " DAI";
 				}
