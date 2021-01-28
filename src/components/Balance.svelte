@@ -84,7 +84,7 @@
 	</div>
 	{#if showDeposit || showWithdraw}
 	<div class='row'>
-		<div class='label'>Wallet DAI {#if chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
+		<div class='label'>Wallet DAI {#if $chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
 		<div class='value'>{formatBigInt($baseBalance)}</div>
 	</div>
 	{/if}
