@@ -115,7 +115,7 @@
 					_close_price = close_price * (1 - fee);
 					pnl = margin * leverage * ((_close_price * 1 - price * 1)/price);
 				} else {
-					_close_price = close_price * (1 + fee);
+					_close_price = close_price * (1 + fee * 1);
 					pnl = margin * leverage * ((price * 1 - _close_price * 1)/price);
 				}
 
