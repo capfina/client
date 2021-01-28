@@ -13,5 +13,5 @@
 </style>
 
 <footer>
-	Cap • <a href='https://t.me/capfin'>Telegram</a>
+	Cap • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://cap.uly.dev/'>Alternative UI</a> • <a href='https://gov.cap.uly.dev/'>Governance</a>
 </footer>
