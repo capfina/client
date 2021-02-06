@@ -31,6 +31,6 @@
 	</div>
 	
 	<div>
-		<a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a> • <a href='https://cap.uly.dev/'>Alternative UI</a> • <a href='https://gov.cap.uly.dev/'>Governance</a>
+		<a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a> • <a href='https://cap.exchange/'>Alternative UI</a> • <a href='https://gov.cap.exchange/'>Governance</a>
 	</div>
 </footer>
