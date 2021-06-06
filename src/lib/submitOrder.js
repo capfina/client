@@ -22,7 +22,6 @@ export default async function submitOrder(params) {
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		gas: '0x249f0', // 150K
 		method: 'submitOrder(bool,bytes32,uint256,uint256)',
 		data: encodeUint(isBuy ? 1 : 0) +
 			encodeBytes32(symbol) +

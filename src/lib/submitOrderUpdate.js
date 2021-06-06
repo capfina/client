@@ -20,7 +20,6 @@ export default async function submitOrderUpdate(params) {
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		gas: '0x249f0', // 150K
 		method: 'submitOrderUpdate(uint256,uint256)',
 		data: encodeUint(positionId) + 
 			encodeUint(margin)

@@ -7,6 +7,13 @@ export const MAX_UINT256 = '0x' + 'f'.repeat(64);
 export const EMPTY_BYTES32 = '0x' + '0'.repeat(64);
 
 export const CONTRACTS = {
+	'0x8376940b1db0': { // arbitrum testnet 5
+		DAI: '0xf011dd14767Da5506c46b2bC3D1659dB758e0683'.toLowerCase(),
+		PRODUCTS: '0x76511C9cC16248E6BaF6EC0D514986d41BE888Ee'.toLowerCase(),
+		TRADING: '0x427ABE67aEBBdC1382d97B656cC67c53D91a03e7'.toLowerCase(),
+		TREASURY: '0xFb78eeFaE670a001edA2216894eE252b612AF903'.toLowerCase()
+	}
+	/*
 	'0x1': {
 		DAI: '0x6b175474e89094c44da98b954eedeac495271d0f'.toLowerCase(),
 		PRODUCTS: '0x5777dc3Cc06D55104C63ECDd48CC88908B6ca3d9'.toLowerCase(),
@@ -27,10 +34,5 @@ export const CONTRACTS = {
 		TRADING: '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e'.toLowerCase(),
 		TREASURY: '0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82'.toLowerCase()
 	},
-	'0x8376940b1db0': { // arbitrum testnet 5
-		DAI: '0xf011dd14767Da5506c46b2bC3D1659dB758e0683'.toLowerCase(),
-		PRODUCTS: '0x76511C9cC16248E6BaF6EC0D514986d41BE888Ee'.toLowerCase(),
-		TRADING: '0x427ABE67aEBBdC1382d97B656cC67c53D91a03e7'.toLowerCase(),
-		TREASURY: '0xFb78eeFaE670a001edA2216894eE252b612AF903'.toLowerCase()
-	}
+	*/
 };

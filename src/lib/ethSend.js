@@ -17,7 +17,7 @@ export default function ethSend(params) {
 		params: [{
 			nonce: '0x00', // ignored by MetaMask
 			gasPrice: '0x3b9aca00', // customizable by user during MetaMask confirmation. (1gwei gas price)
-			gas: gas || '0xf4240', // customizable by user during MetaMask confirmation. (1000000 gas limit)
+			gas: gas || '0x2dc6c0', // customizable by user during MetaMask confirmation. (3000000 gas limit)
 			to: address, // Required except during contract publications.
 			from: get(user), // must match user's active address.
 			value: '0x00', // Only required to send ether to the recipient from the initiating external account.

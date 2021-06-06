@@ -20,7 +20,7 @@
 		reloadBalance.update(n => n + 1);
 		reloadEvents.update(n => n + 1);
 		reloadPositions.update(n => n + 1);
-	}, 5000);
+	}, 3000);
 
 </script>
 

@@ -19,7 +19,6 @@ export default async function withdraw(params) {
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		gas: '0x2bf20', // 180K
 		method: 'withdraw(uint256)',
 		data: encodeUint(amount)
 	});
