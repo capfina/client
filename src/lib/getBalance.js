@@ -7,6 +7,8 @@ export default function getBalance(address) {
 
 	const _user = get(user);
 
+	//console.log('_user', _user);
+	
 	if (!_user) return 0n;
 
 	//console.log('getBalance', address, _user);

@@ -8,7 +8,7 @@ export const reloadBalance = writable(0);
 export const loadingBalance = writable(true);
 
 export const baseBalance = derived([chainId, user, reloadBalance], async ([$chainId, $user, $reloadBalance], set) => {
-	//console.log('loading balance');
+	//console.log('loading balance', $chainId, $user);
 	if (!$chainId || !$user) {
 		set(0);
 		loadingBalance.set(false);

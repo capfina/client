@@ -10,6 +10,7 @@
 	import deposit from '../lib/deposit'
 	import withdraw from '../lib/withdraw'
 	import requestFaucet from '../lib/requestFaucet'
+	import approveDAI from '../lib/approveDAI'
 
 	let input;
 
@@ -72,6 +73,15 @@
 		}
 	}
 
+	async function approve() {
+		try {
+			const txhash = await approveDAI();
+			showToast('Approved DAI for spending.', 'success');
+		} catch (e) {
+			showToast(e && e.message);
+		}
+	}
+
 </script>
 
 <style>
@@ -84,7 +94,7 @@
 	</div>
 	{#if showDeposit || showWithdraw}
 	<div class='row'>
-		<div class='label'>Wallet DAI {#if $chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
+		<div class='label'>Wallet DAI (<a title='Approve DAI' on:click={approve}>approve</a>) {#if $chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
 		<div class='value'>{formatBigInt($baseBalance)}</div>
 	</div>
 	{/if}

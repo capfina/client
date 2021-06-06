@@ -29,9 +29,21 @@
 	    // Normally, we would recommend the 'eth_chainId' RPC method, but it currently
 	    // returns incorrectly formatted chain ID values.
 	    let currentChainId = ethereum.chainId;
+	    //console.log('currentChainId', currentChainId);
+	    if (!currentChainId) {
+	    	// interval set
+	    	const c = setInterval(() => {
+	    		if (currentChainId) {
+	    			chainId.set(currentChainId);
+	    			clearInterval(c);
+	    		}
+	    		currentChainId = ethereum.chainId;
+	    	}, 500);
+	    }
 	    chainId.set(currentChainId);
 
 	    ethereum.on('chainChanged', (_chainId) => {
+	    	//console.log('_chainId', _chainId);
 	    	chainId.set(_chainId);
 	    });
 
