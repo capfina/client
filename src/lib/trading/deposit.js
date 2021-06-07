@@ -27,7 +27,7 @@ export default async function deposit(params) {
 		getNonce(currencyAddress),
 		getAllowance({
 			address: currencyAddress, 
-			spender: getAddress('TRADING')
+			spender: getAddress('TREASURY')
 		})
 	]);
 
@@ -39,7 +39,7 @@ export default async function deposit(params) {
 
 	// approve if allowance not enough
 	if (allowance < 100n * amount) {
-		await approve({symbol: 'DAI', spender: getAddress('TRADING')});
+		await approve({symbol: 'DAI', spender: getAddress('TREASURY')});
 	}
 
 	const { v, r, s } = signature;
