@@ -14,7 +14,10 @@ export const CONTRACTS = {
 		TRADING: '0x427ABE67aEBBdC1382d97B656cC67c53D91a03e7'.toLowerCase(),
 		TREASURY: '0xFb78eeFaE670a001edA2216894eE252b612AF903'.toLowerCase(),
 		GOVERNANCE: '0xe9CFBDE58582732c03E191f13A837e23cEdA366C'.toLowerCase()
-	}
+	},
+	'0x2a': { // Kovan Testnet
+		DAI: '0x6781b5581a05e7dfb74df32f702125b2eea5faf5'.toLowerCase()
+	},
 	/*
 	'0x1': {
 		DAI: '0x6b175474e89094c44da98b954eedeac495271d0f'.toLowerCase(),

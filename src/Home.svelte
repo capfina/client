@@ -8,11 +8,13 @@
 	import Events from './components/Events.svelte'
 	import Footer from './components/Footer.svelte'
 	import Toast from './components/Toast.svelte'
+	import Faucet from './components/Faucet.svelte'
 
 	import { user } from './stores/main'
 	import { reloadBalance } from './stores/balances'
 	import { reloadEvents } from './stores/events'
 	import { reloadPositions } from './stores/positions'
+	import { chainId } from './stores/main'
 
 	// data refresher
 	setInterval(() => {
@@ -36,10 +38,15 @@
 <div class='container'>
 	<Header/>
 	{#if $user}
-		<Balance/>
-		<NewOrder/>
-		<Positions/>
-		<Events/>
+		{#if $chainId != '0x2a'}
+			<Balance/>
+			<NewOrder/>
+			<Positions/>
+			<Events/>
+		{/if}
+		{#if $chainId == '0x2a'}
+			<Faucet/>
+		{/if}
 	{/if}
 	<Footer/>
 </div>
