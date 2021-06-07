@@ -7,8 +7,8 @@
 	import { asyncTimeout, formatBigInt, parseDecimal } from '../lib/utils'
 	import { showToast } from '../stores/toasts'
 
-	import deposit from '../lib/deposit'
-	import withdraw from '../lib/withdraw'
+	import deposit from '../lib/trading/deposit'
+	import withdraw from '../lib/trading/withdraw'
 
 	let input;
 

@@ -1,7 +1,7 @@
-import ethCall from './ethCall'
+import ethCall from '../ethCall'
 import { get } from 'svelte/store'
-import { user } from '../stores/main'
-import { getAddress, encodeAddress, decodeUint, decodeBytes32,decodeAddress } from './utils'
+import { user } from '../../stores/main'
+import { getAddress, encodeAddress, decodeUint, decodeBytes32,decodeAddress } from '../utils'
 
 export default function getPositions(address) {
 

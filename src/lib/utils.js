@@ -49,6 +49,10 @@ export function encodeUint(value) {
 	return BigInt(value).toString(16).padStart(64, 0);
 }
 
+export function encodeBool(value) {
+	return encodeUint(value ? 1 : 0);
+}
+
 export function encodeAddress(address) {
 	return address.substring(2).padStart(64,0);
 }
@@ -65,6 +69,10 @@ export function decodeUint(bytesStr, offset) {
 	const bytesSubstr = bytesStr.slice(offset, offset + 64);
 	if (bytesSubstr.length == 0) return null;
 	return BigInt('0x' + bytesSubstr);
+}
+
+export function decodeBool(bytesStr, offset) {
+	return !!decodeUint(bytesStr, offset);
 }
 
 export function decodeString(bytesStr, offset, length) {
@@ -101,4 +109,17 @@ export function decodeBytes32Array(bytesStr, offset, size) {
 		offset += 64;
 	}
 	return result;
+}
+
+export function abiDecodeOutput(bytesStr, abiOutput) {
+	let index = 0;
+	return Object.assign(
+		...abiOutput.map((abiItem) => {
+			switch(abiItem.type) {
+				case 'uint256': return { [abiItem.name]: decodeUint(bytesStr, 2 + 64 * index++).toString() }
+				case 'address': return { [abiItem.name]: decodeAddress(bytesStr, 2 + 64 * index++) }
+				case 'bool': return { [abiItem.name]: decodeBool(bytesStr, 2 + 64 * index++) }
+			} 
+		})
+	);
 }

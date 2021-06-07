@@ -1,20 +1,13 @@
-import { EMPTY_BYTES32, BIGINT_ZERO } from './constants'
+import { EMPTY_BYTES32, BIGINT_ZERO } from '../constants'
 import { get } from 'svelte/store'
-import { user } from '../stores/main'
-import {
-	getAddress,
-	encodeMethodSignature, 
-	encodeBytes32, 
-	encodeAddress, 
-	encodeUint
-} from './utils'
-
-import ethSend from './ethSend'
-import sign from './sign'
-import getNonce from './getNonce'
-import getName from './getName'
-import getAllowance from './getAllowance'
-import approveDAI from './approveDAI'
+import { user } from '../../stores/main'
+import { getAddress, encodeMethodSignature,  encodeBytes32,  encodeAddress, encodeUint } from '../utils'
+import ethSend from '../ethSend'
+import sign from '../sign'
+import getNonce from '../token/getNonce'
+import getName from '../token/getName'
+import getAllowance from '../token/getAllowance'
+import approve from '../token/approve'
 
 export default async function deposit(params) {
 
@@ -46,7 +39,7 @@ export default async function deposit(params) {
 
 	// approve if allowance not enough
 	if (allowance < 100n * amount) {
-		approveDAI(getAddress('TRADING'));
+		await approve({symbol: 'DAI', spender: getAddress('TRADING')});
 	}
 
 	const { v, r, s } = signature;

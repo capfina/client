@@ -1,7 +1,7 @@
 import { writable, derived } from 'svelte/store'
 import { user, chainId } from './main'
 
-import getPositions from '../lib/getPositions'
+import getPositions from '../lib/trading/getPositions'
 
 export const reloadPositions = writable(0);
 
