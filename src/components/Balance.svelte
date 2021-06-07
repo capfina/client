@@ -7,9 +7,8 @@
 	import { asyncTimeout, formatBigInt, parseDecimal } from '../lib/utils'
 	import { showToast } from '../stores/toasts'
 
-	import deposit from '../lib/deposit'
-	import withdraw from '../lib/withdraw'
-	import requestFaucet from '../lib/requestFaucet'
+	import deposit from '../lib/trading/deposit'
+	import withdraw from '../lib/trading/withdraw'
 
 	let input;
 
@@ -63,15 +62,6 @@
 		}
 	}
 
-	async function faucet() {
-		try {
-			const txhash = await requestFaucet();
-			showToast('Requested DAI from faucet.', 'success');
-		} catch (e) {
-			showToast(e && e.message);
-		}
-	}
-
 </script>
 
 <style>
@@ -79,12 +69,12 @@
 
 <Panel title='Balance'>
 	<div class='row'>
-		<div class='label'>DAI <a on:click={toggleDeposit} title='Deposit DAI'>Deposit</a> | <a on:click={toggleWithdraw} title='Withdraw DAI'>Withdraw</a></div>
+		<div class='label'>DAI on Cap <a on:click={toggleDeposit} title='Deposit DAI'>Deposit</a> | <a on:click={toggleWithdraw} title='Withdraw DAI'>Withdraw</a></div>
 		<div class='value'>{formatBigInt($freeMargin, BigInt(8))}</div>
 	</div>
 	{#if showDeposit || showWithdraw}
 	<div class='row'>
-		<div class='label'>Wallet DAI {#if $chainId != '0x1'}(<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>){/if}</div>
+		<div class='label'>DAI in Wallet</div>
 		<div class='value'>{formatBigInt($baseBalance)}</div>
 	</div>
 	{/if}

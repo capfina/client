@@ -5,8 +5,8 @@
 	import Button from './Button.svelte'
 
 	import { productToFigi } from '../lib/products'
-	import getProductInfo from '../lib/getProductInfo'
-	import submitOrder from '../lib/submitOrder'
+	import getProductInfo from '../lib/products/getProductInfo'
+	import submitOrder from '../lib/trading/submitOrder'
 	import { selectedProduct } from '../stores/main'
 	import { showToast } from '../stores/toasts'
 	import { formatBigInt, parseDecimal } from '../lib/utils'

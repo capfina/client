@@ -1,5 +1,5 @@
-import ethCall from './ethCall'
-import { decodeString } from './utils'
+import ethCall from '../ethCall'
+import { decodeString } from '../utils'
 
 const cache = {};
 

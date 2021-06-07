@@ -1,19 +1,13 @@
-import { EMPTY_BYTES32, BIGINT_ZERO } from './constants'
+import { EMPTY_BYTES32, BIGINT_ZERO } from '../constants'
 import { get } from 'svelte/store'
-import { user } from '../stores/main'
-import {
-	getAddress,
-	encodeMethodSignature, 
-	encodeBytes32, 
-	encodeAddress, 
-	encodeUint
-} from './utils'
-
-import ethSend from './ethSend'
-import sign from './sign'
-import getNonce from './getNonce'
-import getName from './getName'
-import getAllowance from './getAllowance'
+import { user } from '../../stores/main'
+import { getAddress, encodeMethodSignature,  encodeBytes32,  encodeAddress, encodeUint } from '../utils'
+import ethSend from '../ethSend'
+import sign from '../sign'
+import getNonce from '../token/getNonce'
+import getName from '../token/getName'
+import getAllowance from '../token/getAllowance'
+import approve from '../token/approve'
 
 export default async function deposit(params) {
 
@@ -43,26 +37,15 @@ export default async function deposit(params) {
 
 	console.log('allowance', allowance, amount, name, nonce);
 
-	// sign only if not enough allowance margin
-	let permit = false;
+	// approve if allowance not enough
 	if (allowance < 100n * amount) {
-		permit = true;
-		signature = await sign({
-			owner: get(user),
-			name,
-			version: '1',
-			verifyingContract: currencyAddress,
-			verifyingProduct: currency,
-			deadline: '0x' + encodeUint(deadline),
-			nonce
-		});
+		await approve({symbol: 'DAI', spender: getAddress('TRADING')});
 	}
 
 	const { v, r, s } = signature;
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		gas: permit ? '0x38270' : '0x2bf20', // 230K / 180K
 		method: 'deposit(uint256,uint256,uint8,bytes32,bytes32)',
 		data: encodeUint(amount) +
 			encodeUint(deadline) +

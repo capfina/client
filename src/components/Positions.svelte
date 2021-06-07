@@ -6,8 +6,8 @@
 	import { positions } from '../stores/positions'
 	import { showToast } from '../stores/toasts'
 	import { formatBigInt, parseDecimal } from '../lib/utils'
-	import submitOrderUpdate from '../lib/submitOrderUpdate'
-	import getProductInfo from '../lib/getProductInfo'
+	import submitOrderUpdate from '../lib/trading/submitOrderUpdate'
+	import getProductInfo from '../lib/products/getProductInfo'
 	import getBlockByNumber from '../lib/getBlockByNumber'
 	import { figiToProduct } from '../lib/products'
 

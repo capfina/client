@@ -1,7 +1,7 @@
 import { get } from 'svelte/store'
-import { user } from '../stores/main'
-import { encodeAddress } from './utils'
-import ethCall from './ethCall'
+import { user } from '../../stores/main'
+import { encodeAddress } from '../utils'
+import ethCall from '../ethCall'
 
 export default function getNonce(address) {
 

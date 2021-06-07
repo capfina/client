@@ -6,6 +6,14 @@
 
 	let isMetamask;
 
+	function checkChainId(chainId) {
+		if (!chainId) return true;
+		// arbitrum testnet and mainnet
+		if (chainId == '0x8376940b1db0' || chainId == '0xa4b1') return true;
+		showToast('Cap only works on Arbitrum. Please switch to Arbitrum testnet or Arbitrum mainnet and reload the page.');
+		return false;
+	}
+
 	function initProvider() {
 
 		isMetamask = window.ethereum && window.ethereum.isMetaMask;
@@ -15,13 +23,6 @@
 			return;
 		};
 
-		// console.log('ethereum.chainId', ethereum.chainId);
-
-	    // if (ethereum.chainId && ethereum.chainId != '0x1') {
-	    //   showToast('Cap only works on Ethereum mainnet. Please switch to the Main Ethereum Network and reload the page.');
-	    //   return;
-	    // }
-
 	    /**********************************************************/
 	    /* Handle chain (network) and chainChanged (per EIP-1193) */
 	    /**********************************************************/
@@ -29,10 +30,25 @@
 	    // Normally, we would recommend the 'eth_chainId' RPC method, but it currently
 	    // returns incorrectly formatted chain ID values.
 	    let currentChainId = ethereum.chainId;
+	    //console.log('currentChainId', currentChainId);
+	    if (!currentChainId) {
+	    	// interval set
+	    	const c = setInterval(() => {
+	    		if (currentChainId) {
+	    			chainId.set(currentChainId);
+	    			checkChainId(currentChainId);
+	    			clearInterval(c);
+	    		}
+	    		currentChainId = ethereum.chainId;
+	    	}, 500);
+	    }
 	    chainId.set(currentChainId);
+	    checkChainId(currentChainId);
 
 	    ethereum.on('chainChanged', (_chainId) => {
+	    	//console.log('_chainId', _chainId);
 	    	chainId.set(_chainId);
+	    	checkChainId(_chainId);
 	    });
 
 	    /***********************************************************/

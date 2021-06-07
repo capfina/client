@@ -1,5 +1,5 @@
-import ethSend from './ethSend'
-import { getAddress } from './utils'
+import ethSend from '../ethSend'
+import { getAddress } from '../utils'
 
 export default function requestFaucet(address) {
 

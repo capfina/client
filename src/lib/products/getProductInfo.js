@@ -1,5 +1,5 @@
-import ethCall from './ethCall'
-import { getAddress, encodeBytes32, encodeUint, decodeUint } from './utils'
+import ethCall from '../ethCall'
+import { getAddress, encodeBytes32, encodeUint, decodeUint } from '../utils'
 
 let cache = {}
 
