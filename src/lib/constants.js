@@ -8,10 +8,12 @@ export const EMPTY_BYTES32 = '0x' + '0'.repeat(64);
 
 export const NETWORKS = {
 	'0x8376940b1db0': { // arbitrum Kovan testnet
-		L1_INFURA_URL: 'https://kovan.infura.io/v3/<INFURA_TOKEN>'
+		L1_INFURA_URL: 'https://kovan.infura.io/v3/<INFURA_TOKEN>',
+		EXPLORER_URL: 'https://explorer5.arbitrum.io/#'
 	},
 	'0x66eeb': { // arbitrum Rinkeby testnet
-		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/<INFURA_TOKEN>'
+		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/<INFURA_TOKEN>',
+		EXPLORER_URL: 'https://rinkeby-explorer.arbitrum.io'
 	}
 }
 

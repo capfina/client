@@ -3,7 +3,7 @@
 
 	import { chainId } from '../stores/main'
 	import { events } from '../stores/events'
-	import { formatBigInt, parseDecimal } from '../lib/utils'
+	import { formatBigInt, parseDecimal, getNetworkConfig } from '../lib/utils'
 
 	let loading = false;
 	let showDetails;
@@ -34,6 +34,10 @@
 			return `Submitted liquidation [${event.positionId}]`;
 		}
 
+	}
+
+	function explorerURL(chainId, txhash) {
+		return getNetworkConfig('EXPLORER_URL') + '/tx/' + txhash;
 	}
 
 </script>
@@ -68,7 +72,7 @@
 				<span>
 					{eventString(event)}
 				</span>
-				<a on:click={() => {toggleDetails(event.txhash)}}>Details</a> <a target='_blank' href={`https://${$chainId == '0x3' ? 'ropsten.' : ''}etherscan.io/tx/${event.txhash}`}>TX</a>
+				<a on:click={() => {toggleDetails(event.txhash)}}>Details</a> <a target='_blank' href={explorerURL($chainId, event.txhash)}>TX</a>
 			</div>
 			{#if showDetails == event.txhash}
 			<div class='sub-row'>
