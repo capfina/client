@@ -1,6 +1,5 @@
 <script>
 	import Wallet from './Wallet.svelte'
-	import { routeToPage } from '../stores/pages'
 </script>
 
 <style>
@@ -22,7 +21,7 @@
 </style>
 
 <header>
-	<a on:click={() => routeToPage('Home')} title='Cap'>
+	<a href='/#' title='Cap Home'>
 		<div class='logo'>
 			<img alt='Cap Logo' src='/assets/logo-pure.svg' />
 		</div>

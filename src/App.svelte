@@ -5,28 +5,12 @@
 	import { selectedPage } from './stores/pages';
 
 	let params;
+	let page;
 
 	// Set up the pages to watch for
-	router('/', (ctx, next) => {
-		params = {};
-		selectedPage.set('Home');
-		next();
-	});
+	router('/', () => {page = Home});
+	router('/governance', () => {page = Governance});
 
-	router('/:page', (ctx, next) => {
-		params = ctx.params;
-		// console.log('got params', params);
-		const { page } = params;
-		console.log('page:', page);
-		if (page == 'governance') {
-			selectedPage.set('Governance');
-		} else {
-			selectedPage.set('Home');
-		}
-		next();
-	});
-
-	// Set up the router to start and actively watch for changes
 	router.base('/#');
 	router.start();
 </script>
@@ -78,9 +62,5 @@
 </style>
 
 <main>
-	{#if $selectedPage == 'Governance'}
-		<Governance />
-	{:else}
-		<Home />
-	{/if}
+	<svelte:component this="{page}" params="{params}" />
 </main>
