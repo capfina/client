@@ -12,7 +12,8 @@ export default async function executeProposal(params) {
   return ethSend({
     address: getAddress('GOVERNANCE'),
     method: 'executeProposal(uint256)',
-    data: encodeUint(proposalId)
+    data: encodeUint(proposalId),
+    gas: '0x989680'
   });
 
 }
