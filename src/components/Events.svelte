@@ -19,13 +19,13 @@
 	function eventString(event) {
 
 		if (event.eventName == 'Order Submitted') {
-			return `Submitted${event.positionId != 0 ? ' update to [' + event.positionId + ']...' : ' new order...'} ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.leverage}×${event.amount}`;
+			return `Submitted${event.positionId != 0 ? ' update to [' + event.positionId + ']...' : ' new order...'} ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.amount}(×${event.leverage})`;
 		} else if (event.eventName == 'Position Opened') {
-			return `✔ Opened new position ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.leverage}×${event.amount} @ ${event.price} [${event.positionId}]`;
+			return `✔ Opened new position ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.amount}(×${event.leverage}) @ ${event.price} [${event.positionId}]`;
 		} else if (event.eventName == 'Position Closed') {
 			return `✔ Closed ${event.amountClosed} @ ${event.price}, got back ${event.amountToReturn} (${event.amountToReturn - event.amountClosed > 0 ? '+' : ''}${(100 * (event.amountToReturn - event.amountClosed)/event.amountClosed).toFixed(2)}%) [${event.positionId}]`;
 		} else if (event.eventName == 'Position Margin Added') {
-			return `✔ Added margin (${event.newAmount * 1 - event.oldAmount * 1}), now ${event.newLeverage}×${event.newAmount} [${event.positionId}]`;
+			return `✔ Added margin (${event.newAmount * 1 - event.oldAmount * 1}), now ${event.newAmount}(×${event.newLeverage}) [${event.positionId}]`;
 		} else if (event.eventName == 'Order Cancelled') {
 			return `Order cancelled, ${event.reason} [${event.positionId}]`;
 		} else if (event.eventName == 'Position Liquidated') {
