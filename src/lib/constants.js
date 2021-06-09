@@ -9,7 +9,8 @@ export const EMPTY_BYTES32 = '0x' + '0'.repeat(64);
 export const NETWORKS = {
 	'0x66eeb': { // arbitrum Rinkeby testnet
 		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/0bb669b7a5c3417bbf521b6b1c321991',
-		EXPLORER_URL: 'https://rinkeby-explorer.arbitrum.io'
+		EXPLORER_URL: 'https://rinkeby-explorer.arbitrum.io',
+		L1_BLOCK_DURATION: 15
 	}
 }
 

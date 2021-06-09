@@ -3,7 +3,7 @@
 	import Input from './Input.svelte'
 	import Button from './Button.svelte'
 
-	import { proposals, proposalDetails, proposalStates } from '../stores/proposals'
+	import { proposals, proposalDetails, proposalStates, refreshTimers } from '../stores/proposals'
 	import { showToast } from '../stores/toasts'
 
 	import castVote from '../lib/governance/castVote'
@@ -69,6 +69,18 @@
 		if (!proposalInfo || !proposalInfo[id]) return '';
 		return key ? proposalInfo[id][key] : proposalInfo[id];
 	}
+
+	function timeRemaining(mseconds) {
+		var date = new Date(0);
+		date.setSeconds(mseconds / 1000);
+		return date.toISOString().substr(11, 8);
+	}
+
+	const interval = setInterval(() => {
+		refreshTimers.set(Date.now());
+	}, 1000);
+
+	onDestroy(() => clearInterval(interval));
 
 </script>
 
@@ -140,12 +152,14 @@
 						</div>
 					{/if}
 					<div class='tag-group'>
-						{#if info($proposalStates, proposal.id) == 'Active'}
+						{#if info($proposalStates, proposal.id, 'state') == 'Active'}
 							<a on:click={() => {toggleCastVote(proposal.id)}}>Cast Vote</a>
-						{:else if info($proposalStates, proposal.id) == 'Executable'}
+							<span>{timeRemaining($refreshTimers - info($proposalStates, proposal.id, 'until'))}</span>
+						{:else if info($proposalStates, proposal.id, 'state') == 'Executable'}
 							<a on:click={() => {toggleExecuteProposal(proposal.id)}}>Execute Proposal</a>
+							<span>{timeRemaining($refreshTimers - info($proposalStates, proposal.id, 'until'))}</span>
 						{:else}
-							<span><strong>{info($proposalStates, proposal.id)}</strong></span>
+							<span><strong>{info($proposalStates, proposal.id, 'state')}</strong></span>
 						{/if}
 					</div>
 				</div>

@@ -13,6 +13,7 @@ export const reloadProposals = writable(0);
 export const loadingProposals = writable(true);
 export const loadingProposalDetails = writable(true);
 export const loadingProposalStates = writable(true);
+export const refreshTimers = writable(Date.now());
 
 export const proposals = derived([chainId, user, page, reloadProposals], async ([$chainId, $user, $page, $reloadProposals], set) => {
 	loadingProposals.set(true);
@@ -61,7 +62,7 @@ export const proposalStates = derived([proposals], async ([$proposals], set) => 
 
 	const _proposalStates = $proposals.map(proposal => proposalState({proposal, voteThresholds, blockNumber}));
 
-	const _proposalStatesById = _proposalStates.reduce((acc, curr)=> (acc[curr.id]=curr.state, acc), {});
+	const _proposalStatesById = _proposalStates.reduce((acc, curr)=> (acc[curr.id]=curr, acc), {});
 
 	// console.log(_proposalStatesById);
 	set(_proposalStatesById);
