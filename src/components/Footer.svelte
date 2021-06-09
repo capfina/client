@@ -42,6 +42,6 @@
 			<a on:click={() => selectedPage.set('Home')} title='Go to Home'>Home</a>
 		{:else}
 			<a on:click={() => selectedPage.set('Governance')} title='Open Governance'>Governance</a>
-		{/if} • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a> • <a href='https://cap.exchange/'>Alternative UI</a>
+		{/if} • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a>
 	</div>
 </footer>
