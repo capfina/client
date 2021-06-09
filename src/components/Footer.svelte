@@ -1,6 +1,6 @@
 <script>
-
 	import { PRODUCT_TO_FIGI } from '../lib/products'
+	import { chainId } from '../stores/main'
 
 	const products_array = Object.keys(PRODUCT_TO_FIGI).sort();
 	const products = products_array.join(', ');
@@ -32,6 +32,6 @@
 	</div>
 	
 	<div>
-		<a href='/#/governance'>Governance</a> • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a>
+		{#if $chainId != '0x4'}<a href='/#/governance'>Governance</a> • {/if}<a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a>
 	</div>
 </footer>
