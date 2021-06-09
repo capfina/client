@@ -2,7 +2,6 @@
 	import router from 'page';
 	import Home from './pages/Home.svelte';
 	import Governance from './pages/Governance.svelte';
-	import { selectedPage } from './stores/pages';
 
 	let params;
 	let page;
