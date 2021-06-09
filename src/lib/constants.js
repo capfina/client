@@ -7,28 +7,13 @@ export const MAX_UINT256 = '0x' + 'f'.repeat(64);
 export const EMPTY_BYTES32 = '0x' + '0'.repeat(64);
 
 export const NETWORKS = {
-	'0x8376940b1db0': { // arbitrum Kovan testnet
-		L1_INFURA_URL: 'https://kovan.infura.io/v3/<INFURA_TOKEN>',
-		EXPLORER_URL: 'https://explorer5.arbitrum.io/#'
-	},
 	'0x66eeb': { // arbitrum Rinkeby testnet
-		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/<INFURA_TOKEN>',
+		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/0bb669b7a5c3417bbf521b6b1c321991',
 		EXPLORER_URL: 'https://rinkeby-explorer.arbitrum.io'
 	}
 }
 
 export const CONTRACTS = {
-	'0x8376940b1db0': { // arbitrum Kovan testnet
-		DAI: '0xf011dd14767Da5506c46b2bC3D1659dB758e0683'.toLowerCase(),
-		CAP: '0x26b8c17B21B52B265fC05eC367D621eb02a8726f'.toLowerCase(),
-		PRODUCTS: '0x76511C9cC16248E6BaF6EC0D514986d41BE888Ee'.toLowerCase(),
-		TRADING: '0x427ABE67aEBBdC1382d97B656cC67c53D91a03e7'.toLowerCase(),
-		TREASURY: '0xFb78eeFaE670a001edA2216894eE252b612AF903'.toLowerCase(),
-		GOVERNANCE: '0xe9CFBDE58582732c03E191f13A837e23cEdA366C'.toLowerCase()
-	},
-	'0x2a': { // Kovan Testnet
-		DAI: '0x6781b5581a05e7dfb74df32f702125b2eea5faf5'.toLowerCase()
-	},
 	'0x66eeb': { // arbitrum Rinkeby testnet
 		DAI: '0x022733713d0063c656244f03dd391c4b0d48deee'.toLowerCase(),
 		CAP: '0xdc687649424dbbfbca6ccedd3a3bc36356a0e6e9'.toLowerCase(),
