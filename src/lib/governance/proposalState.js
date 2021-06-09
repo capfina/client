@@ -36,6 +36,9 @@ export default function proposalState(params) {
 		});
 	}
 	if (forVotes < againstVotes || forVotes < FOR_VOTES_THRESHOLD) return Object.assign(response, {state: 'Rejected'});
-	if (blockNumber < expirationBlock) return Object.assign(response, {state: 'Executable'});
+	if (blockNumber < expirationBlock) return Object.assign(response, {
+		state: 'Executable',
+		until: Date.now() + Number(expirationBlock - blockNumber) * getNetworkConfig('L1_BLOCK_DURATION') * 1000
+	});
 	return Object.assign(response, {state: 'Expired'});
 }

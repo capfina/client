@@ -73,8 +73,16 @@
 	}
 
 	function timeRemaining(mseconds) {
+		const seconds = mseconds / 1000;
+		const days = Math.floor(seconds / 60 / 60 / 24);
+
+		if (days) {
+			const hours = Math.floor((seconds - days * 24 * 60 * 60) / 60 / 60)
+			return days + 'd' + (hours ? ' ' + hours + 'h' : '');
+		}
+
 		var date = new Date(0);
-		date.setSeconds(mseconds / 1000);
+		date.setSeconds(seconds);
 		return date.toISOString().substr(11, 8);
 	}
 
