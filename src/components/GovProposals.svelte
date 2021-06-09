@@ -1,4 +1,6 @@
 <script>
+	import { onDestroy } from 'svelte';
+
 	import Panel from './Panel.svelte'
 	import Input from './Input.svelte'
 	import Button from './Button.svelte'
