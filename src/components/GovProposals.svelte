@@ -130,7 +130,7 @@
 		{#each $proposals as proposal}
 			<div class='row'>
 				<div>
-					<span><strong>{proposal.id}#</strong> {info($proposalDetails, proposal.id, 'description')}</span>
+					<span><strong>#{proposal.id}</strong> {info($proposalDetails, proposal.id, 'description')}</span>
 				</div>
 
 				<div class='tags'>
