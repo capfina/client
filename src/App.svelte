@@ -1,5 +1,17 @@
 <script>
-	import Home from './Home.svelte';
+	import router from 'page';
+	import Home from './pages/Home.svelte';
+	import Governance from './pages/Governance.svelte';
+
+	let params;
+	let page;
+
+	// Set up the pages to watch for
+	router('/', () => {page = Home});
+	router('/governance', () => {page = Governance});
+
+	router.base('/#');
+	router.start();
 </script>
 
 <style>
@@ -49,5 +61,5 @@
 </style>
 
 <main>
-	<Home />
+	<svelte:component this="{page}" params="{params}" />
 </main>

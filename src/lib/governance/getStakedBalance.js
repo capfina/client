@@ -3,7 +3,7 @@ import { get } from 'svelte/store'
 import { user } from '../../stores/main'
 import { getAddress, encodeAddress } from '../utils'
 
-export default function getStakedBalance(params) {
+export default async function getStakedBalance(params) {
 
 	const _user = get(user);
 

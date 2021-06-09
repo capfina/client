@@ -9,8 +9,8 @@
 	function checkChainId(chainId) {
 		if (!chainId) return true;
 		// arbitrum testnet and mainnet
-		if (chainId == '0x8376940b1db0' || chainId == '0xa4b1') return true;
-		showToast('Cap only works on Arbitrum. Please switch to Arbitrum testnet or Arbitrum mainnet and reload the page.');
+		if (chainId == '0x66eeb' || chainId == '0xa4b1' || chainId == '0x4') return true;
+		showToast('Cap only works on Arbitrum. Please switch to Arbitrum Rinkeby testnet or Arbitrum mainnet and reload the page.');
 		return false;
 	}
 

@@ -21,8 +21,10 @@
 </style>
 
 <header>
-	<div class='logo'>
-		<img alt='Cap Logo' src='/assets/logo-pure.svg' />
-	</div>
+	<a href='/#' title='Cap Home'>
+		<div class='logo'>
+			<img alt='Cap Logo' src='/assets/logo-pure.svg' />
+		</div>
+	</a>
 	<Wallet/>
 </header>

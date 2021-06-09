@@ -176,7 +176,7 @@
 
 			<div class='row'>
 				<span>
-					{position.isBuy ? '⬆' : '⬇'} {figiToProduct(position.symbol)} {formatBigInt(position.leverage, BigInt(8))}×{formatBigInt(position.margin, BigInt(8))} DAI @ {formatBigInt(position.price, BigInt(8))} [{position.id}]
+					{position.isBuy ? '⬆' : '⬇'} {figiToProduct(position.symbol)} {formatBigInt(position.margin, BigInt(8))}(×{formatBigInt(position.leverage, BigInt(8))}) @ {formatBigInt(position.price, BigInt(8))} [{position.id}]
 				</span>
 				<a on:click={() => {toggleClosePosition(position.id)}}>Close</a> <a on:click={() => {toggleEstimator(position.id)}}>Est</a>
 			</div>

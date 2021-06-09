@@ -3,7 +3,7 @@
 
 	import { chainId } from '../stores/main'
 	import { events } from '../stores/events'
-	import { formatBigInt, parseDecimal } from '../lib/utils'
+	import { formatBigInt, parseDecimal, getNetworkConfig } from '../lib/utils'
 
 	let loading = false;
 	let showDetails;
@@ -19,13 +19,13 @@
 	function eventString(event) {
 
 		if (event.eventName == 'Order Submitted') {
-			return `Submitted${event.positionId != 0 ? ' update to [' + event.positionId + ']...' : ' new order...'} ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.leverage}×${event.amount}`;
+			return `Submitted${event.positionId != 0 ? ' update to [' + event.positionId + ']...' : ' new order...'} ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.amount}(×${event.leverage})`;
 		} else if (event.eventName == 'Position Opened') {
-			return `✔ Opened new position ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.leverage}×${event.amount} @ ${event.price} [${event.positionId}]`;
+			return `✔ Opened new position ${event.isBuy ? '⬆' : '⬇'} ${event.symbol} ${event.amount}(×${event.leverage}) @ ${event.price} [${event.positionId}]`;
 		} else if (event.eventName == 'Position Closed') {
 			return `✔ Closed ${event.amountClosed} @ ${event.price}, got back ${event.amountToReturn} (${event.amountToReturn - event.amountClosed > 0 ? '+' : ''}${(100 * (event.amountToReturn - event.amountClosed)/event.amountClosed).toFixed(2)}%) [${event.positionId}]`;
 		} else if (event.eventName == 'Position Margin Added') {
-			return `✔ Added margin (${event.newAmount * 1 - event.oldAmount * 1}), now ${event.newLeverage}×${event.newAmount} [${event.positionId}]`;
+			return `✔ Added margin (${event.newAmount * 1 - event.oldAmount * 1}), now ${event.newAmount}(×${event.newLeverage}) [${event.positionId}]`;
 		} else if (event.eventName == 'Order Cancelled') {
 			return `Order cancelled, ${event.reason} [${event.positionId}]`;
 		} else if (event.eventName == 'Position Liquidated') {
@@ -34,6 +34,10 @@
 			return `Submitted liquidation [${event.positionId}]`;
 		}
 
+	}
+
+	function explorerURL(chainId, txhash) {
+		return getNetworkConfig('EXPLORER_URL') + '/tx/' + txhash;
 	}
 
 </script>
@@ -68,7 +72,7 @@
 				<span>
 					{eventString(event)}
 				</span>
-				<a on:click={() => {toggleDetails(event.txhash)}}>Details</a> <a target='_blank' href={`https://${$chainId == '0x3' ? 'ropsten.' : ''}etherscan.io/tx/${event.txhash}`}>TX</a>
+				<a on:click={() => {toggleDetails(event.txhash)}}>Details</a> <a target='_blank' href={explorerURL($chainId, event.txhash)}>TX</a>
 			</div>
 			{#if showDetails == event.txhash}
 			<div class='sub-row'>

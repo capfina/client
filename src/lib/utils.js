@@ -1,4 +1,4 @@
-import { CONTRACTS, DEFAULT_DECIMALS, DEFAULT_PRECISION } from './constants'
+import { CONTRACTS, NETWORKS, DEFAULT_DECIMALS, DEFAULT_PRECISION } from './constants'
 
 export function asyncTimeout(duration) {
 	return new Promise((resolve) => {
@@ -9,6 +9,11 @@ export function asyncTimeout(duration) {
 export function getAddress(name) {
 	if (!window.ethereum || !ethereum.chainId) return null;
 	return CONTRACTS[ethereum.chainId][name];
+}
+
+export function getNetworkConfig(key) {
+	if (!window.ethereum || !ethereum.chainId) return null;
+	return NETWORKS[ethereum.chainId][key];
 }
 
 export function formatUserForEvent(user) {
@@ -75,23 +80,86 @@ export function decodeBool(bytesStr, offset) {
 	return !!decodeUint(bytesStr, offset);
 }
 
+export function decodeSize(data, offset) {
+	return Number(
+		decodeUint(data, offset)
+	);
+}
+
+export function decodeOffset(data, offset) {
+	return Number(
+		decodeUint(data, offset) * 2n
+	);
+}
+
 export function decodeString(bytesStr, offset, length) {
+	if (!length) {
+		length = decodeOffset(bytesStr, offset);
+		offset += 64;
+	}
 	const bytes = bytesStr.slice(offset);
 	const uint8Array = new Uint8Array(bytes.match(/.{1,2}/g).map(hex => parseInt(hex, 16)));
-	return new TextDecoder().decode(uint8Array).substring(0, length);
+	return (new TextDecoder().decode(uint8Array).substring(0, length)).replace(/\u0000+$/g, '');
+}
+
+export function decodeBytes(bytesStr, offset) {
+	const length = decodeOffset(bytesStr, offset);
+	offset += 64;
+	return bytesStr.slice(offset).substring(0, length);
 }
 
 export function decodeAddress(bytesStr, offset) {
 	return '0x' + bytesStr.slice(offset + 24, offset + 64);
 }
 
-export function decodeAddressArray(bytesStr, offset, size) {
+export function decodeFixedSizedArray(bytesStr, offset) {
+	// exctract array size
+	const size = decodeSize(bytesStr, offset);
+	offset += 64;
+
+	// extract array elements
 	const result = []
 	for (let i=0; i < size; i++) {
-		result.push(decodeAddress(bytesStr, offset));
+		result.push(bytesStr.slice(offset, offset + 64));
 		offset += 64;
 	}
 	return result;
+}
+
+export function decodeAddressArray(bytesStr, offset) {
+	return decodeFixedSizedArray(bytesStr, offset).map(bytes => decodeAddress(bytes, 0));
+}
+
+export function decodeUintArray(bytesStr, offset) {
+	return decodeFixedSizedArray(bytesStr, offset).map(bytes => decodeUint(bytes, 0));
+}
+
+export function decodeDynamicSizedArray(bytesStr, offset) {
+	// exctract array size
+	const size = decodeSize(bytesStr, offset);
+	offset += 64;
+	const begin = offset;
+
+	// extract array elements
+	const offsets = []
+	for (let i=0; i < size; i++) {
+		offsets.push(decodeOffset(bytesStr, offset));
+		offset += 64;
+	}
+
+	return {begin, offsets};
+
+	return offsets.map(o => decodeString(bytesStr, beginIndex + o));
+}
+
+export function decodeStringArray(bytesStr, offset) {
+	const { begin, offsets } = decodeDynamicSizedArray(bytesStr, offset);
+	return offsets.map(o => decodeString(bytesStr, begin + o));
+}
+
+export function decodeBytesArray(bytesStr, offset) {
+	const { begin, offsets } = decodeDynamicSizedArray(bytesStr, offset);
+	return offsets.map(o => decodeBytes(bytesStr, begin + o));
 }
 
 export function decodeBytes32(bytesStr, offset) {
@@ -116,7 +184,7 @@ export function abiDecodeOutput(bytesStr, abiOutput) {
 	return Object.assign(
 		...abiOutput.map((abiItem) => {
 			switch(abiItem.type) {
-				case 'uint256': return { [abiItem.name]: decodeUint(bytesStr, 2 + 64 * index++).toString() }
+				case 'uint256': return { [abiItem.name]: BigInt(decodeUint(bytesStr, 2 + 64 * index++)) }
 				case 'address': return { [abiItem.name]: decodeAddress(bytesStr, 2 + 64 * index++) }
 				case 'bool': return { [abiItem.name]: decodeBool(bytesStr, 2 + 64 * index++) }
 			} 
