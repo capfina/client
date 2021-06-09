@@ -36,7 +36,7 @@
 		{#if $selectedPage == 'Governance'}
 			<a on:click={() => routeToPage('Home')} title='Go to Home'>Home</a>
 		{:else}
-			<a on:click={() => selectedPage.set('Governance')} title='Open Governance'>Governance</a>
+			<a on:click={() => routeToPage('Governance')} title='Open Governance'>Governance</a>
 		{/if} • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a>
 	</div>
 </footer>
