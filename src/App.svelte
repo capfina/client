@@ -1,5 +1,34 @@
 <script>
-	import Home from './Home.svelte';
+	import router from 'page';
+	import Home from './pages/Home.svelte';
+	import Governance from './pages/Governance.svelte';
+	import { selectedPage } from './stores/pages';
+
+	let params;
+
+	// Set up the pages to watch for
+	router('/', (ctx, next) => {
+		params = {};
+		selectedPage.set('Home');
+		next();
+	});
+
+	router('/:page', (ctx, next) => {
+		params = ctx.params;
+		// console.log('got params', params);
+		const { page } = params;
+		console.log('page:', page);
+		if (page == 'governance') {
+			selectedPage.set('Governance');
+		} else {
+			selectedPage.set('Home');
+		}
+		next();
+	});
+
+	// Set up the router to start and actively watch for changes
+	router.base('/#');
+	router.start();
 </script>
 
 <style>
@@ -49,5 +78,9 @@
 </style>
 
 <main>
-	<Home />
+	{#if $selectedPage == 'Governance'}
+		<Governance />
+	{:else}
+		<Home />
+	{/if}
 </main>

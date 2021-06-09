@@ -1,9 +1,16 @@
 <script>
 
-	import { PRODUCT_TO_FIGI } from '../lib/products.js'
+	import { PRODUCT_TO_FIGI } from '../lib/products'
+	import { selectedPage } from '../stores/pages'
 
 	const products_array = Object.keys(PRODUCT_TO_FIGI).sort();
 	const products = products_array.join(', ');
+
+
+	function routeToPage(page) {
+		selectedPage.set(page);
+	}
+
 </script>
 
 <style>
@@ -31,6 +38,10 @@
 	</div>
 	
 	<div>
-		<a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a> • <a href='https://cap.exchange/'>Alternative UI</a> • <a href='https://gov.cap.exchange/'>Governance</a>
+		{#if $selectedPage == 'Governance'}
+			<a on:click={() => selectedPage.set('Home')} title='Go to Home'>Home</a>
+		{:else}
+			<a on:click={() => selectedPage.set('Governance')} title='Open Governance'>Governance</a>
+		{/if} • <a href='https://t.me/capfin'>Telegram</a> • <a href='https://github.com/capfina'>Github</a> • <a href='https://cap.exchange/'>Alternative UI</a>
 	</div>
 </footer>

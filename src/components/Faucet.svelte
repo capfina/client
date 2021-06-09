@@ -20,7 +20,7 @@
 <style>
 </style>
 
-<Panel title='Kovan Faucet'>
+<Panel title='DAI Faucet'>
 	<div class='row'>
 		<div class='label'>Wallet DAI (<a title='Get 10,000 testnet DAI' on:click={faucet}>faucet</a>)</div>
 		<div class='value'>{formatBigInt($baseBalance || 0)}</div>

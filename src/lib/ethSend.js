@@ -9,6 +9,7 @@ export default function ethSend(params) {
 		address,
 		method,
 		data,
+		value,
 		gas
 	} = params;
 
@@ -20,7 +21,7 @@ export default function ethSend(params) {
 			gas: gas || '0x2dc6c0', // customizable by user during MetaMask confirmation. (3000000 gas limit)
 			to: address, // Required except during contract publications.
 			from: get(user), // must match user's active address.
-			value: '0x00', // Only required to send ether to the recipient from the initiating external account.
+			value: value || '0x00', // Only required to send ether to the recipient from the initiating external account.
 			data: encodeMethodSignature(keccak256(method)) + data,
 			chainId: 1 // Used to prevent transaction reuse across blockchains. Auto-filled by MetaMask.
 		}]

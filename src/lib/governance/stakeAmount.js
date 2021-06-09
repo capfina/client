@@ -18,7 +18,7 @@ export default async function stakeAmount(params) {
 		spender: GOVERNANCE_ADDRESS
 	})
 
-	console.log('allowance', allowance, amount, name, nonce);
+	console.log('allowance', allowance, amount);
 
 	// approve if allowance not enough
 	if (allowance < 100n * amount) {
