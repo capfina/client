@@ -2,7 +2,6 @@ export const PRODUCT_TO_FIGI = {
 	"BTC": "BTC",
 	"ETH": "ETH",
 	"LINK": "LINK",
-	"DOT": "DOT",
 	"LTC": "LTC",
 	"MMM": "BBG000BP52R2",
 	"ATVI": "BBG000CVWGS6",
