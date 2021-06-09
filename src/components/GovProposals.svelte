@@ -155,11 +155,11 @@
 					{/if}
 					<div class='tag-group'>
 						{#if info($proposalStates, proposal.id, 'state') == 'Active'}
+							<span>{timeRemaining($refreshTimers - info($proposalStates, proposal.id, 'until'))}</span>
 							<a on:click={() => {toggleCastVote(proposal.id)}}>Cast Vote</a>
-							<span>{timeRemaining($refreshTimers - info($proposalStates, proposal.id, 'until'))}</span>
 						{:else if info($proposalStates, proposal.id, 'state') == 'Executable'}
-							<a on:click={() => {toggleExecuteProposal(proposal.id)}}>Execute Proposal</a>
 							<span>{timeRemaining($refreshTimers - info($proposalStates, proposal.id, 'until'))}</span>
+							<a on:click={() => {toggleExecuteProposal(proposal.id)}}>Execute Proposal</a>
 						{:else}
 							<span><strong>{info($proposalStates, proposal.id, 'state')}</strong></span>
 						{/if}

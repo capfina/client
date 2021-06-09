@@ -28,11 +28,11 @@ export default function proposalState(params) {
 	if (blockNumber <= endBlock) {
 		if (expedited && forVotes > againstVotes && forVotes > FOR_VOTES_EXPEDITED_THRESHOLD) return Object.assign(response, {
 			state: 'Executable',
-			until: Date.now() + (expirationBlock - blockNumber) * getNetworkConfig('L1_BLOCK_DURATION') * 1000
+			until: Date.now() + Number(expirationBlock - blockNumber) * getNetworkConfig('L1_BLOCK_DURATION') * 1000
 		});
 		return Object.assign(response, {
 			state: 'Active',
-			until: Date.now() + (endBlock - blockNumber) * getNetworkConfig('L1_BLOCK_DURATION') * 1000
+			until: Date.now() + Number(endBlock - blockNumber) * getNetworkConfig('L1_BLOCK_DURATION') * 1000
 		});
 	}
 	if (forVotes < againstVotes || forVotes < FOR_VOTES_THRESHOLD) return Object.assign(response, {state: 'Rejected'});
