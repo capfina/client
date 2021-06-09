@@ -1,6 +1,6 @@
 <script>
 	import Wallet from './Wallet.svelte'
-	import { selectedPage } from '../stores/pages'
+	import { routeToPage } from '../stores/pages'
 </script>
 
 <style>
@@ -22,7 +22,7 @@
 </style>
 
 <header>
-	<a on:click={() => selectedPage.set('Home')} title='Cap'>
+	<a on:click={() => routeToPage('Home')} title='Cap'>
 		<div class='logo'>
 			<img alt='Cap Logo' src='/assets/logo-pure.svg' />
 		</div>
