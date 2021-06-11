@@ -8,7 +8,7 @@
 	import { formatBigInt, parseDecimal } from '../lib/utils'
 	import submitOrderUpdate from '../lib/trading/submitOrderUpdate'
 	import getProductInfo from '../lib/products/getProductInfo'
-	import getBlockByNumber from '../lib/getBlockByNumber'
+	import getBlockNumber from '../lib/layer1/getBlockNumber'
 	import { figiToProduct } from '../lib/products'
 
 	let input;
@@ -112,7 +112,7 @@
 				block = parseInt(block);
 				let _close_price;
 				if (isBuy) {
-					_close_price = close_price * (1 - fee);
+					_close_price = close_price * (1 - fee * 1);
 					pnl = margin * leverage * ((_close_price * 1 - price * 1)/price);
 				} else {
 					_close_price = close_price * (1 + fee * 1);
@@ -123,9 +123,9 @@
 				
 				fundingRate = formatBigInt(fundingRate, BigInt(8), BigInt(8));
 
-				const currentBlock = await getBlockByNumber();
+				const currentBlock = await getBlockNumber();
 
-				let fundingToApply = margin * leverage * (currentBlock.number - block) * fundingRate;
+				let fundingToApply = margin * leverage * Number(currentBlock - BigInt(block)) * fundingRate;
 
 				pnl -= fundingToApply;
 
