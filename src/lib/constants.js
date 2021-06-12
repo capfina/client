@@ -8,9 +8,19 @@ export const EMPTY_BYTES32 = '0x' + '0'.repeat(64);
 
 export const NETWORKS = {
 	'0x66eeb': { // arbitrum Rinkeby testnet
-		L1_INFURA_URL: 'https://rinkeby.infura.io/v3/0bb669b7a5c3417bbf521b6b1c321991',
+		L1_CHAIN_ID: '0x4',
+		NETWORK_RPC_URL: 'https://rinkeby.arbitrum.io/rpc',
 		EXPLORER_URL: 'https://rinkeby-explorer.arbitrum.io',
-		L1_BLOCK_DURATION: 15
+		L1_BLOCK_DURATION: 15,
+		ARB_RETRYABLE_TX_ADDRESS: '0x000000000000000000000000000000000000006E'.toLowerCase(),
+		ARB_NODE_INTERFACE_ADDRESS: '0x00000000000000000000000000000000000000C8'.toLowerCase()
+	},
+	'0x4': { // Rinkeby Testnet
+		L2_CHAIN_ID: '0x66eeb',
+		NETWORK_RPC_URL: 'https://rinkeby.infura.io/v3/0bb669b7a5c3417bbf521b6b1c321991',
+		EXPLORER_URL: 'https://rinkeby.etherscan.io/',
+		ARBITRUM_L1_GATEWAY_ROUTER_ADDRESS: '0x70c143928ecffaf9f5b406f7f4fc28dc43d68380'.toLowerCase(),
+		ARBITRUM_INBOX_ADDRESS: '0x578BAde599406A8fE3d24Fd7f7211c0911F5B29e'.toLowerCase(),
 	}
 }
 
@@ -24,7 +34,8 @@ export const CONTRACTS = {
 		GOVERNANCE: '0x2Ca465694aCad69D9954eA8B399334eAD1815152'.toLowerCase()
 	},
 	'0x4': { // Rinkeby Testnet
-		DAI: '0x68020B5B270e033B10edD07f3532fbA0f656c466'.toLowerCase()
+		DAI: '0x68020B5B270e033B10edD07f3532fbA0f656c466'.toLowerCase(),
+		CAP: '0xa1EC1B3FBc72ecFd2DAe04c1eB7f2f416aa159b3'.toLowerCase()
 	},
 	/*
 	'0x1': {

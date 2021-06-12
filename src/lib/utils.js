@@ -6,14 +6,28 @@ export function asyncTimeout(duration) {
 	})
 }
 
-export function getAddress(name) {
+export function getChainId(layer) {
 	if (!window.ethereum || !ethereum.chainId) return null;
-	return CONTRACTS[ethereum.chainId][name];
+	switch (layer) {
+		case 1: return NETWORKS[ethereum.chainId].L1_CHAIN_ID || ethereum.chainId;
+		case 2: return NETWORKS[ethereum.chainId].L2_CHAIN_ID || ethereum.chainId;
+		default: return ethereum.chainId;
+	}
 }
 
-export function getNetworkConfig(key) {
+export function isUsingLayer(layer) {
 	if (!window.ethereum || !ethereum.chainId) return null;
-	return NETWORKS[ethereum.chainId][key];
+	return ethereum.chainId == getChainId(layer);
+}
+
+export function getAddress(name, layer) {
+	const chainId = getChainId(layer);
+	return chainId ? CONTRACTS[chainId][name] : null;
+}
+
+export function getNetworkConfig(key, layer) {
+	const chainId = getChainId(layer);
+	return chainId ? NETWORKS[chainId][key] : null;
 }
 
 export function formatUserForEvent(user) {
@@ -26,12 +40,12 @@ export function formatBigInt(value, decimals, precision) {
 	if (!decimals) decimals = DEFAULT_DECIMALS;
 	if (!precision) precision = DEFAULT_PRECISION;
 
-	const unit = 10n ** decimals;
+	const unit = 10n ** BigInt(decimals);
 	const integer = value / unit;
 	const fractional = (value % unit);
 	if (fractional == 0n) return `${integer}`;
 
-	const precisionUnit = 10n ** (decimals - precision);
+	const precisionUnit = 10n ** (BigInt(decimals) - BigInt(precision));
 	const relevantFractional = fractional / precisionUnit;
 	const remainderFractional = fractional % precisionUnit;
 
@@ -60,6 +74,11 @@ export function encodeBool(value) {
 
 export function encodeAddress(address) {
 	return address.substring(2).padStart(64,0);
+}
+
+// expects raw bytes without 0x prefix
+export function encodeBytesStrSize(bytesStr) {
+	return encodeUint(bytesStr.length / 2);
 }
 
 export function encodeBytes32(value) {
@@ -190,4 +209,9 @@ export function abiDecodeOutput(bytesStr, abiOutput) {
 			} 
 		})
 	);
+}
+
+// expects raw bytes without 0x prefix
+export function bytesToUnitArray(bytesStr) {
+	return new Uint8Array(bytesStr.match(/.{1,2}/g).map(hex => parseInt(hex, 16)));
 }

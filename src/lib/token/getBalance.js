@@ -3,20 +3,17 @@ import { get } from 'svelte/store'
 import { user } from '../../stores/main'
 import { getAddress, encodeAddress } from '../utils'
 
-export default function getBalance(address) {
+export default function getBalance(address, layer) {
 
 	const _user = get(user);
 
-	//console.log('_user', _user);
-	
 	if (!_user) return 0n;
 
-	//console.log('getBalance', address, _user);
-
 	return ethCall({
-		address: address || getAddress('DAI'),
+		address: address || getAddress('DAI', layer),
 		method: 'balanceOf(address)',
-		data: encodeAddress(_user)
+		data: encodeAddress(_user),
+		layer
 	}).then((balance) => {
 		//console.log('got balance', balance);
 		if (balance == '0x') return 0n;

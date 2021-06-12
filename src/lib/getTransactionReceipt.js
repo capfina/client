@@ -1,14 +1,19 @@
+import ethereumRequest from './ethereumRequest'
+
 let cache = {}
 
-export default function getTransactionReceipt(txhash) {
+export default function getTransactionReceipt(txhash, layer) {
 
-	if (cache[txhash]) return Promise.resolve(cache[txhash]);
+	const cache_key = `${txhash}${layer}`
+	if (cache[cache_key]) return Promise.resolve(cache[cache_key]);
 
-	return ethereum.request({
+	const requestParams = {
 		method: 'eth_getTransactionReceipt',
 		params: [txhash]
-	}).then((receipt) => {
-		if (receipt) cache[txhash] = receipt;
+	}
+
+	return ethereumRequest({ requestParams, layer }).then((receipt) => {
+		if (receipt) cache[cache_key] = receipt;
 		return receipt;
 	});
 	

@@ -3,7 +3,7 @@ import { encodeMethodSignature } from './utils'
 import { get } from 'svelte/store'
 import { user } from '../stores/main'
 
-export default function ethSend(params) {
+export default async function ethSend(params) {
 
 	const {
 		address,

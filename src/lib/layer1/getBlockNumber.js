@@ -1,24 +1,14 @@
 import { getNetworkConfig } from '../utils'
-import doFetch from '../doFetch'
+import ethereumRequest from '../ethereumRequest'
 
 export default async function getBlockNumber(params) {
 
-	const url = getNetworkConfig('L1_INFURA_URL');
+	const requestParams = {
+		method: 'eth_blockNumber',
+		params: []
+	}
 
-	const { result } = await doFetch(url, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-			jsonrpc: '2.0',
-			id: 1,
-			method: 'eth_blockNumber',
-			params: []
-		})
-	})
-
-	// console.log(BigInt(result));
+	const result = await ethereumRequest({ requestParams, layer: 1 });
 
 	return BigInt(result);
 }

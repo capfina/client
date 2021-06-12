@@ -1,10 +1,14 @@
 import ethSend from '../ethSend'
 import { getAddress } from '../utils'
 
-export default function requestFaucet(address) {
+export default function requestFaucet(params) {
+
+	const {
+		asset
+	} = params;
 
 	return ethSend({
-		address: address || getAddress('DAI'),
+		address: getAddress(asset || 'DAI'),
 		method: 'faucetRequest()',
 		data: ''
 	}).then((balance) => {
