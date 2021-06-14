@@ -1,7 +1,13 @@
 import { keccak256 } from 'js-sha3'
-import { encodeUint, getChainId, bytesToUnitArray } from '../utils'
+import { getChainId } from '../utils'
+import { encodeUint } from '../abi/encoders'
 
 const LEFTMOST_BIT = BigInt('0x8000000000000000000000000000000000000000000000000000000000000000');
+
+// expects raw bytes without 0x prefix
+function bytesToUnitArray(bytesStr) {
+	return new Uint8Array(bytesStr.match(/.{1,2}/g).map(hex => parseInt(hex, 16)));
+}
 
 export function calculateL2TransactionHash(seqNum) {
 	const encodedChainId = encodeUint(getChainId(2));

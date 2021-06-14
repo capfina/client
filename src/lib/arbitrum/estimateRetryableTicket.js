@@ -1,4 +1,4 @@
-import { getNetworkConfig, abiDecodeOutput, encodeAddress, encodeUint, encodeBytesStrSize } from '../utils'
+import { getNetworkConfig, abiDecodeOutput } from '../utils'
 import ethCall from '../ethCall'
 
 export default async function estimateRetryableTicket(params) {
@@ -18,27 +18,29 @@ export default async function estimateRetryableTicket(params) {
 
 	const result = await ethCall({
 		address: getNetworkConfig('ARB_NODE_INTERFACE_ADDRESS', 2).toUpperCase(),
-		method: 'estimateRetryableTicket(address,uint256,address,uint256,uint256,address,address,uint256,uint256,bytes)',
-		data: [
-			encodeAddress(sender),
-			encodeUint(deposit),
-			encodeAddress(destAddr),
-			encodeUint(l2CallValue),
-			encodeUint(maxSubmissionCost),
-			encodeAddress(excessFeeRefundAddress),
-			encodeAddress(callValueRefundAddress),
-			encodeUint(maxGas),
-			encodeUint(gasPriceBid),
-			encodeUint(10 * 64 / 2 /* offset */) + (data ? encodeBytesStrSize(data) + data : encodeUint(0))
-		].join(''),
+		data: {
+			type: 'function',
+			name: 'estimateRetryableTicket',
+			inputs: [
+				{ type: 'address', value: sender },
+				{ type: 'uint256', value: deposit },
+				{ type: 'address', value: destAddr },
+				{ type: 'uint256', value: l2CallValue },
+				{ type: 'uint256', value: maxSubmissionCost },
+				{ type: 'address', value: excessFeeRefundAddress },
+				{ type: 'address', value: callValueRefundAddress },
+				{ type: 'uint256', value: maxGas },
+				{ type: 'uint256', value: gasPriceBid },
+				{ type: 'bytes', value: data || '' }
+			],
+			outputs: [
+				{ name: 'maxGas', type: 'uint256' },
+				{ name: 'nextUpdateTimestamp', type: 'uint256' } // not sure about this name
+			]
+		},
 		layer: 2
 	})
 
-	const output = abiDecodeOutput(result, [
-		{name: 'maxGas', type: 'uint256'},
-		{name: 'nextUpdateTimestamp', type: 'uint256'} // TODO not sure about this name
-	]);
-
-	return output.maxGas;
+	return result.maxGas;
 
 }

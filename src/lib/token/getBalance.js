@@ -1,7 +1,7 @@
 import ethCall from '../ethCall'
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeAddress } from '../utils'
+import { getAddress } from '../utils'
 
 export default function getBalance(address, layer) {
 
@@ -11,14 +11,20 @@ export default function getBalance(address, layer) {
 
 	return ethCall({
 		address: address || getAddress('DAI', layer),
-		method: 'balanceOf(address)',
-		data: encodeAddress(_user),
+		data: {
+			type: 'function',
+			name: 'balanceOf',
+			inputs: [
+				{ type: 'address', value: _user }
+			],
+			outputs: [
+				{ type: 'uint256', name: 'balance' }
+			]
+		},
 		layer
-	}).then((balance) => {
-		//console.log('got balance', balance);
-		if (balance == '0x') return 0n;
-		return BigInt(balance);
-	}).catch((e) => {
+	})
+	.then(r => BigInt(r.balance))
+	.catch((e) => {
 		console.log('balance err', e);
 	});
 

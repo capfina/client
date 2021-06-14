@@ -2,7 +2,8 @@ import { keccak256 } from 'js-sha3'
 
 import { get } from 'svelte/store'
 import { user } from '../stores/main'
-import { getAddress, formatUserForEvent, decodeUint, decodeAddress, decodeString, decodeBytes32, formatBigInt } from './utils'
+import { decodeParameters } from './abi/decoders'
+import { getAddress, formatUserForEvent, formatBigInt } from './utils'
 
 import getBlockByNumber from './getBlockByNumber'
 import getLogs from './getLogs'
@@ -34,84 +35,154 @@ function extractLogData(log) {
 	
 	if (eventType == EVENTS[0]) {
 		// order submitted
-		return {
-			eventName: 'Order Submitted',
-			id: decodeUint(data, 2),
-			isBuy: decodeUint(data, 2 + 64),
-			symbol: figiToProduct(decodeBytes32(data, 2 + 64 * 2).replace(/\u0000+$/g, '')),
-			amount: formatBigInt(decodeUint(data, 2 + 64 * 3), BigInt(8)),
-			leverage: formatBigInt(decodeUint(data, 2 + 64 * 4), BigInt(8)),
-			positionId: decodeUint(data, 2 + 64 * 5).toString(),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Order Submitted',
+				id: null,
+				isBuy: null,
+				symbol: null,
+				amount: null,
+				leverage: null,
+				positionId: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'id' },
+					{ type: 'bool', name: 'isBuy' },
+					{ type: 'bytes32', name: 'symbol', format: figiToProduct },
+					{ type: 'uint256', name: 'amount', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'leverage', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'positionId' }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[1]) {
 		// order cancelled
-		return {
-			eventName: 'Order Cancelled',
-			id: decodeUint(data, 2).toString(),
-			positionId: decodeUint(data, 2 + 64).toString(),
-			reason: decodeString(data, 2 + 64 * 3, /* length */ parseInt(data.slice(2 + 64 * 2, 2 + 64 * 3), 16)),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Order Cancelled',
+				id: null,
+				positionId: null,
+				reason: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'id' },
+					{ type: 'uint256', name: 'positionId' },
+					{ type: 'string', name: 'reason' }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[2]) {
 		// position open
-		return {
-			eventName: 'Position Opened',
-			positionId: decodeUint(data, 2).toString(),
-			isBuy: decodeUint(data, 2 + 64),
-			symbol: figiToProduct(decodeBytes32(data, 2 + 64 * 2).replace(/\u0000+$/g, '')),
-			amount: formatBigInt(decodeUint(data, 2 + 64 * 3), BigInt(8)),
-			leverage: formatBigInt(decodeUint(data, 2 + 64 * 4), BigInt(8)),
-			price: formatBigInt(decodeUint(data, 2 + 64 * 5), BigInt(8)),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Position Opened',
+				positionId: null,
+				isBuy: null,
+				symbol: null,
+				amount: null,
+				leverage: null,
+				price: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'positionId' },
+					{ type: 'bool', name: 'isBuy' },
+					{ type: 'bytes32', name: 'symbol', format: figiToProduct },
+					{ type: 'uint256', name: 'amount', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'leverage', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'price', format: (r) => formatBigInt(r, BigInt(8)) }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[3]) {
 		// position margin added
-		return {
-			eventName: 'Position Margin Added',
-			positionId: decodeUint(data, 2).toString(),
-			newAmount: formatBigInt(decodeUint(data, 2 + 64), BigInt(8)),
-			oldAmount: formatBigInt(decodeUint(data, 2 + 64 * 2), BigInt(8)),
-			newLeverage: formatBigInt(decodeUint(data, 2 + 64 * 3), BigInt(8)),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Position Margin Added',
+				positionId: null,
+				newAmount: null,
+				oldAmount: null,
+				newLeverage: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'positionId' },
+					{ type: 'uint256', name: 'newAmount', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'oldAmount', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'newLeverage', format: (r) => formatBigInt(r, BigInt(8)) }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[4]) {
 		// position liquidated
-		return {
-			eventName: 'Position Liquidated',
-			positionId: decodeUint(data, 2).toString(),
-			marginLiquidated: formatBigInt(decodeUint(data, 2 + 64), BigInt(8)),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Position Liquidated',
+				positionId: null,
+				marginLiquidated: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'positionId' },
+					{ type: 'uint256', name: 'marginLiquidated', format: (r) => formatBigInt(r, BigInt(8)) }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[5]) {
 		// position closed
-		return {
-			eventName: 'Position Closed',
-			positionId: decodeUint(data, 2).toString(),
-			amountClosed: formatBigInt(decodeUint(data, 2 + 64), BigInt(8)),
-			amountToReturn: formatBigInt(decodeUint(data, 2 + 64 * 2), BigInt(8)),
-			entryPrice: formatBigInt(decodeUint(data, 2 + 64 * 3), BigInt(8)),
-			price: formatBigInt(decodeUint(data, 2 + 64 * 4), BigInt(8)),
-			leverage: formatBigInt(decodeUint(data, 2 + 64 * 5), BigInt(8)),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Position Closed',
+				positionId: null,
+				amountClosed: null,
+				amountToReturn: null,
+				entryPrice: null,
+				price: null,
+				leverage: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'positionId' },
+					{ type: 'uint256', name: 'amountClosed', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'amountToReturn', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'entryPrice', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'price', format: (r) => formatBigInt(r, BigInt(8)) },
+					{ type: 'uint256', name: 'leverage', format: (r) => formatBigInt(r, BigInt(8)) }
+				], data
+			)
+		);
 	} else if (eventType == EVENTS[6]) {
 		// liquidation submitted
-		return {
-			eventName: 'Liquidation Submitted',
-			id: decodeUint(data, 2).toString(),
-			positionId: decodeUint(data, 2 + 64).toString(),
-			blockNumber: parseInt(blockNumber, 16),
-			txhash: transactionHash
-		}
+		return Object.assign(
+			{
+				eventName: 'Liquidation Submitted',
+				id: null,
+				positionId: null,
+				blockNumber: parseInt(blockNumber, 16),
+				txhash: transactionHash
+			},
+			decodeParameters(
+				[
+					{ type: 'uint256', name: 'id' },
+					{ type: 'uint256', name: 'positionId' }
+				], data
+			)
+		);
 	}
-
 
 	// other todo
 	return log;

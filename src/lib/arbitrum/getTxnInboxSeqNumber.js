@@ -1,6 +1,6 @@
 import { keccak256 } from 'js-sha3'
-import { decodeUint } from '../utils'
 import getTransactionReceipt from '../getTransactionReceipt'
+import { decodeParameter } from '../abi/decoders'
 
 const EVENTS = [
 	// InboxMessageDelivered(uint256 indexed messageNum, bytes data)
@@ -21,8 +21,8 @@ function extractLogData(log) {
 
 	if (eventType == EVENTS[0] || eventType == EVENTS[1]) {
 		return {
-			messageNum: decodeUint(topics[1], 2).toString()
-		}
+			messageNum: Number(decodeParameter({ type: 'uint256', name: 'messageNum' }, topics[1], 2))
+		};
 	}
 
 	return null;

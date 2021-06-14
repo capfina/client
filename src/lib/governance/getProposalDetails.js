@@ -1,19 +1,8 @@
 import { keccak256 } from 'js-sha3'
 
-import {
-	getAddress,
-	decodeAddress,
-	decodeUint,
-	decodeBool,
-	decodeAddressArray,
-	decodeUintArray,
-	decodeStringArray,
-	decodeBytesArray,
-	decodeString,
-	decodeOffset
-} from '../utils'
-
 import getLogs from '../getLogs'
+import { getAddress } from '../utils'
+import { decodeParameters } from '../abi/decoders'
 
 const EVENTS = [
 	'0x' + keccak256('ProposalCreated(uint256,address,address[],uint256[],string[],bytes[],string,bool)')
@@ -31,27 +20,19 @@ function extractLogData(log) {
 
 	if (eventType == EVENTS[0]) {
 		// order submitted
-		const interm = {
-			proposer: decodeAddress(data, 2),
-			contracts_offset: decodeOffset(data, 2 + 64),
-			values_offset: decodeOffset(data, 2 + 64 * 2),
-			signatures_offset: decodeOffset(data, 2 + 64 * 3),
-			calldatas_offset: decodeOffset(data, 2 + 64 * 4),
-			description_offset: decodeOffset(data, 2 + 64 * 5),
-			expedited: decodeBool(data, 2 + 64 * 6)
-		}
 
-		const raw_data = data.slice(2);
+		return decodeParameters(
+			[
+				{ type: 'address', name: 'proposer' },
+				{ type: 'address[]', name: 'contracts' },
+				{ type: 'uint256[]', name: 'values' },
+				{ type: 'string[]', name: 'signatures' },
+				{ type: 'bytes[]', name: 'calldatas' },
+				{ type: 'string', name: 'description' },
+				{ type: 'bool', name: 'expedited' },
+			], data
+		);
 
-		return {
-			proposer: interm.proposer,
-			contracts: decodeAddressArray(raw_data, interm.contracts_offset),
-			values: decodeUintArray(raw_data, interm.values_offset),
-			signatures: decodeStringArray(raw_data, interm.signatures_offset),
-			calldatas: decodeBytesArray(raw_data, interm.calldatas_offset),
-			description: decodeString(raw_data, interm.description_offset),
-			expedited: interm.expedited
-		}
 	}
 	return {};
 }

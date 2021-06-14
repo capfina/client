@@ -1,18 +1,31 @@
 import ethCall from '../ethCall'
-import { getAddress, encodeUint } from '../utils'
+import { getAddress } from '../utils'
 
 export default async function getVoteThresholds(params) {
 
-	return {
-		forVotesThreshold: await ethCall({
+	return Object.assign(
+		await ethCall({
 			address: getAddress('GOVERNANCE'),
-			method: 'forVotesThreshold()',
-			data: ''
+			data: {
+				type: 'function',
+				name: 'forVotesThreshold',
+				inputs: [],
+				outputs: [
+					{ type: 'address', name: 'forVotesThreshold' }
+				]
+			}
 		}),
-		forVotesExpeditedThreshold: await ethCall({
+		await ethCall({
 			address: getAddress('GOVERNANCE'),
-			method: 'forVotesExpeditedThreshold()',
-			data: ''
+			data: {
+				type: 'function',
+				name: 'forVotesExpeditedThreshold',
+				inputs: [],
+				outputs: [
+					{ type: 'address', name: 'forVotesExpeditedThreshold' }
+				]
+			}
 		})
-	}
+	);
+
 }

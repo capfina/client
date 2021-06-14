@@ -1,5 +1,5 @@
 import { keccak256 } from 'js-sha3'
-import { encodeMethodSignature, getNetworkConfig, isUsingLayer } from './utils'
+import { getNetworkConfig, isUsingLayer } from './utils'
 import doFetch from './doFetch'
 
 let reqId = 1;

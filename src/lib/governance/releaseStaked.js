@@ -1,4 +1,4 @@
-import { getAddress, encodeUint } from '../utils'
+import { getAddress } from '../utils'
 import ethSend from '../ethSend'
 
 export default async function stakeAmount(params) {
@@ -11,8 +11,13 @@ export default async function stakeAmount(params) {
 
 	return ethSend({
 		address: getAddress('GOVERNANCE'),
-		method: 'releaseStaked(uint256)',
-		data: encodeUint(amount)
+		data: {
+			type: 'function',
+			name: 'releaseStaked',
+			inputs: [
+				{ type: 'uint256', value: amount }
+			]
+		}
 	});
 
 }

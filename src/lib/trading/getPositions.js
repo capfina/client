@@ -1,7 +1,7 @@
 import ethCall from '../ethCall'
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeAddress, decodeUint, decodeBytes32,decodeAddress } from '../utils'
+import { getAddress } from '../utils'
 
 export default function getPositions(address) {
 
@@ -11,52 +11,34 @@ export default function getPositions(address) {
 
 	return ethCall({
 		address: getAddress('TRADING'),
-		method: 'getUserPositions(address)',
-		data: encodeAddress(_user)
-	}).then((result) => {
-		//console.log('result-pos', result);
-
-		let offset = 2 /* 0x */ + 64 /* offset */;
-		const size = parseInt(result.slice(offset, offset + 64), 16);
-
-		offset += 64;
-
-		const results = []
-		for (let i=0; i < size; i++) {
-
-			const sender = decodeAddress(result, offset);
-			offset += 64;
-			const symbol = decodeBytes32(result, offset).replace(/\u0000+$/g, '');
-			offset += 64;
-
-			const margin = decodeUint(result, offset);
-			offset += 64;
-			const leverage = decodeUint(result, offset);
-			offset += 64;
-			const price = decodeUint(result, offset);
-			offset += 64;
-			const block = decodeUint(result, offset);
-			offset += 64;
-			const isBuy = decodeUint(result, offset);
-			offset += 64;
-			const id = decodeUint(result, offset);
-			offset += 64;
-			
-			results.push({
-				id,
-				isBuy,
-				symbol,
-				margin,
-				leverage,
-				price,
-				block,
-				sender
-			});
-
+		data: {
+			type: 'function',
+			name: 'getUserPositions',
+			inputs: [
+				{ type: 'address', value: _user }
+			],
+			outputs: [
+				{
+					components: [
+						{ type: 'address', name: 'sender' },
+						{ type: 'bytes32', name: 'symbol' },
+						{ type: 'uint256', name: 'margin' },
+						{ type: 'uint256', name: 'leverage' },
+						{ type: 'uint256', name: 'price' },
+						{ type: 'uint256', name: 'block' },
+						{ type: 'bool', name: 'isBuy' },
+						{ type: 'uint256', name: 'id' }
+					],
+					type: 'tuples[]',
+					name: 'positions'
+				}
+			]
 		}
+	})
+	.then((result) => {
 
- 		//results.reverse();
- 		results.sort((a, b) => {
+		const { positions } = result;
+ 		positions.sort((a, b) => {
  			if (a.id < b.id) {
  				return 1;
  			} else if (a.id > b.id) {
@@ -65,10 +47,10 @@ export default function getPositions(address) {
  			return 0;
  		});
 
-		//console.log(results);
-		return results;
+		return positions;
 
-	}).catch((err) => {
+	})
+	.catch((err) => {
 		console.log('err-pos', err);
 	});
 

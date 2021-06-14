@@ -9,11 +9,11 @@ export default function requestFaucet(params) {
 
 	return ethSend({
 		address: getAddress(asset || 'DAI'),
-		method: 'faucetRequest()',
-		data: ''
-	}).then((balance) => {
-		if (balance == '0x') return 0n;
-		return BigInt(balance);
+		data: {
+			type: 'function',
+			name: 'faucetRequest',
+			inputs: []
+		}
 	});
 	
 }

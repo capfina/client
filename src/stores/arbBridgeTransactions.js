@@ -68,6 +68,7 @@ export async function updateTransactionInfo() {
 		switch (transaction.type + '_' + transaction.status) {
 			case 'L1-deposit_pending': {
 				const { txid, status, messageNum } = await getTxnInboxSeqNumber({txid: transaction.txid});
+				console.log({ txid, status, messageNum });
 				updateTransaction({
 					txid,
 					messageNum,

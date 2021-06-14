@@ -1,7 +1,7 @@
 import ethCall from '../ethCall'
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeAddress } from '../utils'
+import { getAddress } from '../utils'
 
 export default async function getStakedBalance(params) {
 
@@ -11,13 +11,19 @@ export default async function getStakedBalance(params) {
 
 	return ethCall({
 		address: getAddress('GOVERNANCE'),
-		method: 'balanceOf(address)',
-		data: encodeAddress(_user)
-	}).then((balance) => {
-		// console.log('got balance', balance);
-		if (balance == '0x') return 0n;
-		return BigInt(balance);
-	}).catch((e) => {
+		data: {
+			type: 'function',
+			name: 'balanceOf',
+			inputs: [
+				{ type: 'address', value: _user }
+			],
+			outputs: [
+				{ type: 'uint256', name: 'balance' }
+			]
+		}
+	})
+	.then(r => r.balance)
+	.catch((e) => {
 		console.log('balance err', e);
 	});
 

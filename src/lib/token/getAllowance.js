@@ -1,6 +1,5 @@
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeAddress } from '../utils'
 import ethCall from '../ethCall'
 
 export default function getAllowance(params) {
@@ -10,12 +9,20 @@ export default function getAllowance(params) {
 		address
 	} = params;
 
-	const owner = get(user);
-
 	return ethCall({
 		address: address,
-		method: 'allowance(address,address)',
-		data: encodeAddress(owner) + encodeAddress(spender)
-	}).then(BigInt);
+		data: {
+			type: 'function',
+			name: 'allowance',
+			inputs: [
+				{ type: 'address', value: get(user) },
+				{ type: 'address', value: spender }
+			],
+			outputs: [
+				{ type: 'uint256', name: 'allowance' }
+			]
+		}
+	})
+	.then(r => BigInt(r.allowance));
 
 }

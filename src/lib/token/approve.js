@@ -1,5 +1,5 @@
 import ethSend from '../ethSend'
-import { getAddress, encodeAddress, encodeUint } from '../utils'
+import { getAddress } from '../utils'
 
 export default async function approve(params) {
 
@@ -10,8 +10,14 @@ export default async function approve(params) {
 
 	return ethSend({
 		address: getAddress(symbol),
-		method: 'approve(address,uint256)',
-		data: encodeAddress(spender) + BigInt('0x' + 'F'.repeat(64)).toString()
+		data: {
+			type: 'function',
+			name: 'approve',
+			inputs: [
+				{ type: 'address', value: spender },
+				{ type: 'uint256', value: BigInt('0x' + 'F'.repeat(64)) }
+			]
+		}
 	}).then((x,e) => {
 		console.log('got x', x, e)
 	});

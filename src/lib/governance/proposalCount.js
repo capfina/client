@@ -5,8 +5,14 @@ export default async function proposalCount(params) {
 
 	return ethCall({
 		address: getAddress('GOVERNANCE'),
-		method: 'proposalCount()',
-		data: ''
-	}).then(BigInt);
+		data: {
+			type: 'function',
+			name: 'proposalCount',
+			inputs: [],
+			outputs: [
+				{ type: 'uint256', name: 'count' }
+			]
+		}
+	}).then(r => BigInt(r.count));
 
 }

@@ -1,5 +1,4 @@
 import ethCall from '../ethCall'
-import { encodeAddress, encodeUint, decodeBytes } from '../utils'
 
 export async function getOutboundCalldataFromGateway(params) {
 
@@ -12,21 +11,27 @@ export async function getOutboundCalldataFromGateway(params) {
 		data
 	} = params;
 
-	const result = await ethCall({
+	const { calldata } = await ethCall({
 		address: gateway,
-		method: 'getOutboundCalldata(address,address,address,uint256,bytes)',
-		data: [
-			encodeAddress(token),
-			encodeAddress(from),
-			encodeAddress(to),
-			encodeUint(amount),
-			encodeUint(5 * 64 / 2 /* offset */) + (data || encodeUint(0))
-		].join(''),
+		data: {
+			type: 'function',
+			name: 'getOutboundCalldata',
+			inputs: [
+				{ type: 'address', value: token },
+				{ type: 'address', value: from },
+				{ type: 'address', value: to },
+				{ type: 'uint256', value: amount },
+				{ type: 'bytes', value: data || '' }
+			],
+			outputs: [
+				{ type: 'bytes', name: 'calldata' }
+			]
+		},
 		layer: 1
 	})
 
 	// returns raw bytes without any prefix
-	return decodeBytes(result, 2 + 64);
+	return calldata;
 
 }
 
@@ -38,12 +43,18 @@ export async function counterpartGateway(params) {
 
 	const result = await ethCall({
 		address: gateway,
-		method: 'counterpartGateway()',
-		data: '',
+		data: {
+			type: 'function',
+			name: 'counterpartGateway',
+			inputs: [],
+			outputs: [
+				{ type: 'address', name: 'counterpartGateway' }
+			],
+		},
 		layer: 1
 	})
 
 	// returns bytes string with prefix and offset
-	return result;
+	return result.counterpartGateway;
 
 }

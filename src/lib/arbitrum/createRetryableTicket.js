@@ -1,4 +1,4 @@
-import { getNetworkConfig, encodeAddress, encodeUint } from '../utils'
+import { getNetworkConfig } from '../utils'
 import ethSend from '../ethSend'
 
 export default async function createRetryableTicket(params) {
@@ -21,17 +21,20 @@ export default async function createRetryableTicket(params) {
 
 	return ethSend({
 		address: inbox,
-		method: 'createRetryableTicket(address,uint256,uint256,address,address,uint256,uint256,bytes)',
-		data: [
-			encodeAddress(destAddr),
-			encodeUint(l2CallValue),
-			encodeUint(maxSubmissionCost),
-			encodeAddress(excessFeeRefundAddress),
-			encodeAddress(callValueRefundAddress),
-			encodeUint(maxGas),
-			encodeUint(gasPriceBid),
-			encodeUint(8 * 64 / 2 /* offset */) + (data || encodeUint(0))
-		].join(''),
+		data: {
+			type: 'function',
+			name: 'createRetryableTicket',
+			inputs: [
+				{ type: 'address', value: destAddr },
+				{ type: 'uint256', value: l2CallValue },
+				{ type: 'uint256', value: maxSubmissionCost },
+				{ type: 'address', value: excessFeeRefundAddress },
+				{ type: 'address', value: callValueRefundAddress },
+				{ type: 'uint256', value: maxGas },
+				{ type: 'uint256', value: gasPriceBid },
+				{ type: 'bytes', value: data || '' }
+			]
+		},
 		value
 	});
 

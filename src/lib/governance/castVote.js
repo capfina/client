@@ -1,4 +1,4 @@
-import { getAddress, encodeUint, encodeBool } from '../utils'
+import { getAddress } from '../utils'
 import ethSend from '../ethSend'
 
 export default async function castVote(params) {
@@ -12,8 +12,14 @@ export default async function castVote(params) {
 
 	return ethSend({
 		address: getAddress('GOVERNANCE'),
-		method: 'castVote(uint256,bool)',
-		data: encodeUint(proposalId) + encodeBool(support)
+		data: {
+			type: 'function',
+			name: 'castVote',
+			inputs: [
+				{ type: 'uint256', value: proposalId },
+				{ type: 'bool', value: support }
+			]
+		}
 	});
 
 }

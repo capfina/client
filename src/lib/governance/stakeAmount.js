@@ -1,4 +1,4 @@
-import { getAddress, encodeUint } from '../utils'
+import { getAddress } from '../utils'
 import ethSend from '../ethSend'
 import getAllowance from '../token/getAllowance'
 import approve from '../token/approve'
@@ -27,8 +27,13 @@ export default async function stakeAmount(params) {
 
 	return ethSend({
 		address: GOVERNANCE_ADDRESS,
-		method: 'stakeToVote(uint256)',
-		data: encodeUint(amount)
+		data: {
+			type: 'function',
+			name: 'stakeToVote',
+			inputs: [
+				{ type: 'uint256', value: amount }
+			]
+		}
 	});
 
 }

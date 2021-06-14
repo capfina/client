@@ -1,7 +1,6 @@
-import { EMPTY_BYTES32, BIGINT_ZERO } from '../constants'
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeMethodSignature,  encodeBytes32,  encodeAddress,  encodeUint } from '../utils'
+import { getAddress } from '../utils'
 import ethSend from '../ethSend'
 
 export default async function submitOrder(params) {
@@ -15,11 +14,16 @@ export default async function submitOrder(params) {
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		method: 'submitOrder(bool,bytes32,uint256,uint256)',
-		data: encodeUint(isBuy ? 1 : 0) +
-			encodeBytes32(symbol) +
-			encodeUint(margin) +
-			encodeUint(leverage)
+		data: {
+			type: 'function',
+			name: 'submitOrder',
+			inputs: [
+				{ type: 'bool', value: isBuy },
+				{ type: 'bytes32', value: symbol },
+				{ type: 'uint256', value: margin },
+				{ type: 'uint256', value: leverage }
+			]
+		}
 	});
 
 }

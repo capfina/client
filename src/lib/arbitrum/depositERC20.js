@@ -1,4 +1,5 @@
-import { getNetworkConfig, getAddress, encodeAddress, encodeUint, encodeBytesStrSize } from '../utils'
+import { getNetworkConfig, getAddress } from '../utils'
+import { encodeUint } from '../abi/encoders'
 import ethSend from '../ethSend'
 import getSubmissionPrice from './getSubmissionPrice'
 import { getOutboundCalldataFromGateway, counterpartGateway } from './gatewayHelpers'
@@ -60,21 +61,24 @@ export default async function depositERC20(params) {
 
 	// prepare request
 	const dataContent = [
-		encodeUint(maxSubmissionPrice),				// max submission price
+		encodeUint(maxSubmissionPrice),                         // max submission price
 		encodeUint(2 * 64 / 2 /* offset */) + (data || encodeUint(0))
 	].join('')
 
 	return ethSend({
 		address: getNetworkConfig('ARBITRUM_L1_GATEWAY_ROUTER_ADDRESS', 1),
-		method: 'outboundTransfer(address,address,uint256,uint256,uint256,bytes)',
-		data: [
-			encodeAddress(l1Token),					// erc20L1Address
-			encodeAddress(_user),					// destination
-			encodeUint(amount),						// amount
-			encodeUint(maxGas),						// maxGas
-			encodeUint(gasPriceBid),				// gasPriceBid
-			encodeUint(6 * 64 / 2 /* offset */) + encodeBytesStrSize(dataContent) + dataContent
-		].join(''),
+		data: {
+			type: 'function',
+			name: 'outboundTransfer',
+			inputs: [
+				{ type: 'address', value: l1Token },			// erc20L1Address
+				{ type: 'address', value: _user },				// destination
+				{ type: 'uint256', value: amount },				// amount
+				{ type: 'uint256', value: maxGas },				// maxGas
+				{ type: 'uint256', value: gasPriceBid },		// gasPriceBid
+				{ type: 'bytes', value: dataContent || '' }
+			]
+		},
 		// forwarding gas
 		value: '0x' + BigInt(ethDeposit).toString(16)
 	});

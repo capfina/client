@@ -1,7 +1,7 @@
 import { EMPTY_BYTES32, BIGINT_ZERO } from '../constants'
 import { get } from 'svelte/store'
 import { user } from '../../stores/main'
-import { getAddress, encodeMethodSignature,  encodeBytes32,  encodeAddress, encodeUint } from '../utils'
+import { getAddress } from '../utils'
 import ethSend from '../ethSend'
 import sign from '../sign'
 import getNonce from '../token/getNonce'
@@ -46,12 +46,17 @@ export default async function deposit(params) {
 
 	return ethSend({
 		address: getAddress('TRADING'),
-		method: 'deposit(uint256,uint256,uint8,bytes32,bytes32)',
-		data: encodeUint(amount) +
-			encodeUint(deadline) +
-			encodeUint(v) +
-			r.slice(2) +
-			s.slice(2)
+		data: {
+			type: 'function',
+			name: 'deposit',
+			inputs: [
+				{ type: 'uint256', value: amount },
+				{ type: 'uint256', value: deadline },
+				{ type: 'uint8', value: v },
+				{ type: 'bytes32', value: r },
+				{ type: 'bytes32', value: s }
+			]
+		}
 	});
 
 }

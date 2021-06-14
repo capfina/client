@@ -1,6 +1,5 @@
 import { get } from 'svelte/store'
 import { user } from '../stores/main'
-import { encodeAddress } from './utils'
 import ethereumRequest from './ethereumRequest'
 
 export default function getBalance(params) {

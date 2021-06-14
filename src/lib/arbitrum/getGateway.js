@@ -1,5 +1,5 @@
 import ethCall from '../ethCall'
-import { getNetworkConfig, getAddress, abiDecodeOutput, encodeAddress } from '../utils'
+import { getNetworkConfig, getAddress } from '../utils'
 
 export default async function getGateway(params) {
 
@@ -7,16 +7,20 @@ export default async function getGateway(params) {
 		asset
 	} = params;
 
-	const result = await ethCall({
+	const { gateway } = await ethCall({
 		address: getNetworkConfig('ARBITRUM_L1_GATEWAY_ROUTER_ADDRESS', 1),
-		method: 'getGateway(address)',
-		data: encodeAddress(getAddress(asset, 1)),
+		data: {
+			type: 'function',
+			name: 'getGateway',
+			inputs: [
+				{ type: 'address', value: getAddress(asset, 1) }
+			],
+			outputs: [
+				{ type: 'address', name: 'gateway' }
+			],
+		},
 		layer: 1
 	})
-
-	const { gateway } = abiDecodeOutput(result, [
-		{name: 'gateway', type: 'address'}
-	]);
 
 	return gateway;
 
